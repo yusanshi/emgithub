@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+    <title>Embed Like Gist</title>
+    <script>
+        $(function () {
+            // Initialize popovers
+            $('[data-toggle="popover"]').popover()
+
+            $("#goButton").on("click", function (e) {
+                e.preventDefault();
+                const jsURL = `${window.location.protocol}//${window.location.host}/embed.js?target=${$("#target").val()}`;
+                const scriptTag = `<script src=\"${jsURL}\"><\/script>`;
+                $("#embededCode").val(scriptTag);
+
+                // Load the JS file dynamically
+                $('#previewArea').empty();
+                $("#previewArea").append(scriptTag);
+            });
+
+
+            $("#copyButton").on("click", function (e) {
+                e.preventDefault();
+                copyTextToClipboard($("#embededCode").val());
+            });
+
+            if (["/", "/index.html", "/index.htm"].includes(window.location.pathname)) {
+                // Is entering the site directly
+                $("#target").attr("placeholder", "https://github.com/user/repository/blob/branch/src/hello.cpp");
+            } else {
+                // 404 triggered. Fill in target and simulate clicking
+                $("#target").val("https://github.com" + window.location.pathname);
+                $("#goButton").click();
+            }
+
+            var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
+            link.type = "image/png";
+            link.rel = "shortcut icon";
+            link.href = `${window.location.protocol}//${window.location.host}/favicon.png`;
+            document.getElementsByTagName('head')[0].appendChild(link);
+
+        });
+
+        // https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
+        function copyTextToClipboard(text) {
+            if (!navigator.clipboard) {
+                fallbackCopyTextToClipboard(text);
+                return;
+            }
+            navigator.clipboard.writeText(text).then(function () {
+                console.log('Async: Copying to clipboard was successful!');
+            }, function (err) {
+                console.error('Async: Could not copy text: ', err);
+            });
+        }
+
+        function fallbackCopyTextToClipboard(text) {
+            var textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.position = "fixed";  //avoid scrolling to bottom
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                var successful = document.execCommand('copy');
+                var msg = successful ? 'successful' : 'unsuccessful';
+                console.log('Fallback: Copying text command was ' + msg);
+            } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+            }
+
+            document.body.removeChild(textArea);
+        }
+
+
+    </script>
+</head>
+
+<body>
+    <main role="main" class="container">
+        <div class="jumbotron my-3">
+            <h1>Embed Like Gist</h1>
+            <p class="lead">Paste URL of the file you would like to embed. You can also simply add "em" before
+                "github.com" in address bar. If you find this helpful, consider <a target="_blank"
+                    href="https://github.com/yusanshi/embed_like_gist">giving me a Star</a>.</p>
+
+            <div class="input-group input-group-lg">
+                <input type="text" id="target" class="form-control">
+                <div class="input-group-append">
+                    <button class="btn btn-lg btn-primary" type="button" id="goButton">Go</button>
+                </div>
+
+            </div>
+            <br>
+            <br>
+            <label for="embededCode">Code to embed</label>
+            <div class="input-group input-group-lg">
+                <input type="text" id="embededCode" class="form-control" onclick="this.select();">
+                <div class="input-group-append">
+                    <!-- Not use <button> here, see https://getbootstrap.com/docs/4.4/components/popovers/#dismiss-on-next-click -->
+                    <a tabindex="0" class="btn btn-lg btn-outline-secondary" id="copyButton" role="button"
+                        data-toggle="popover" data-trigger="focus" data-placement="bottom"
+                        data-content="Copied!">Copy</a>
+                </div>
+            </div>
+            <br>
+            <label for="codeArea">Preview</label>
+            <div id="previewArea"></div>
+        </div>
+        </div>
+    </main>
+</body>
+
+</html>
