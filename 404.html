@@ -14,15 +14,24 @@
             // Initialize popovers
             $('[data-toggle="popover"]').popover()
 
-            $("#goButton").on("click", function (e) {
+            $("#goForm").on("submit", function (e) {
                 e.preventDefault();
-                const jsURL = `${window.location.protocol}//${window.location.host}/embed.js?target=${$("#target").val()}`;
-                const scriptTag = `<script src=\"${jsURL}\"><\/script>`;
-                $("#embededCode").val(scriptTag);
+                var target = $("#target").val();
+                var pattern = /^(https|http):\/\/github\.com(\/[A-Za-z0-9_\-\.]+){2}\/(tree|blob)\/[A-Za-z0-9_\-\.]+\//;
+                if (pattern.test(target)) {
+                    $("#target").removeClass("is-invalid");
+                    $("#target").addClass("is-valid");
+                    const jsURL = `${window.location.protocol}//${window.location.host}/embed.js?target=${target}`;
+                    const scriptTag = `<script src=\"${jsURL}\"><\/script>`;
+                    $("#embededCode").val(scriptTag);
 
-                // Load the JS file dynamically
-                $('#previewArea').empty();
-                $("#previewArea").append(scriptTag);
+                    // Load the JS file dynamically
+                    $("#previewArea").empty();
+                    $("#previewArea").append(scriptTag);
+                } else {
+                    $("#target").removeClass("is-valid");
+                    $("#target").addClass("is-invalid");
+                }
             });
 
 
@@ -37,7 +46,7 @@
             } else {
                 // 404 triggered. Fill in target and simulate clicking
                 $("#target").val("https://github.com" + window.location.pathname);
-                $("#goButton").click();
+                $("#goForm").submit();
             }
 
             var link = document.querySelector("link[rel*='icon']") || document.createElement('link');
@@ -80,7 +89,6 @@
             document.body.removeChild(textArea);
         }
 
-
     </script>
 </head>
 
@@ -91,14 +99,15 @@
             <p class="lead">Paste URL of the file you would like to embed. You can also simply add "em" before
                 "github.com" in address bar. If you find this helpful, consider <a target="_blank"
                     href="https://github.com/yusanshi/embed_like_gist">giving me a Star</a>.</p>
-
-            <div class="input-group input-group-lg">
-                <input type="text" id="target" class="form-control">
-                <div class="input-group-append">
-                    <button class="btn btn-lg btn-primary" type="button" id="goButton">Go</button>
+            <form id="goForm">
+                <div class="input-group input-group-lg">
+                    <input type="text" id="target" class="form-control">
+                    <div class="input-group-append">
+                        <button class="btn btn-lg btn-primary" type="submit">Go</button>
+                    </div>
+                    <div class="invalid-feedback">Invalid URL. Example: https://github.com/user/repository/blob/branch/src/hello.cpp</div>
                 </div>
-
-            </div>
+            </form>
             <br>
             <br>
             <label for="embededCode">Code to embed</label>

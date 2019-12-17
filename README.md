@@ -1,10 +1,10 @@
 # Embed Like Gist
 
-Embed file on Github just like [gist](https://gist.github.com/).
+Embed file on Github just like [Github Gist](https://gist.github.com/).
 
 - [ ] Show spinner while loading
 - [ ] Support more style from  [GitHub syntax theme generators](https://github.com/primer/github-syntax-theme-generator)
-- [ ] Check input
+- [x] Check input
 
 ## Get started
 
