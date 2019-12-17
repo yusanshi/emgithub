@@ -42,12 +42,11 @@ function embed() {
           </div>
         </div>
         `;
-
         allDiv[i].getElementsByClassName("js-file-line-container")[0].appendChild(document.createTextNode(text));
       }
     };
   }).catch(function (error) {
-    var allDiv = document.getElementsByClassName(filter(rawFile));
+    var allDiv = document.getElementsByClassName(pathSplit.join("-"));
     for (var i = 0; i < allDiv.length; i++) {
       if (!allDiv[i].hasChildNodes()) {
         allDiv[i].appendChild(document.createTextNode(`Failed to fetch ${rawFile}: ${error.message}`));
