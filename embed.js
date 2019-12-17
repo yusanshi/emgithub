@@ -37,7 +37,7 @@ function embed() {
               <a target="_blank" href="${rawFile}" style="float:right">view raw</a>
               <a target="_blank" href="${target.href}">${pathSplit[pathSplit.length - 1]}</a>
               hosted with &#10084; by <a target="_blank"
-                href="${window.location.protocol}//${window.location.host}">EmGithub.com</a>
+                href="https://emgithub.com/">EmGithub.com</a>
             </div>
           </div>
         </div>
