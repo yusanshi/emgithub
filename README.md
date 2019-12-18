@@ -2,9 +2,9 @@
 
 Embed file on Github just like [Github Gist](https://gist.github.com/).
 
-- [ ] Show spinner while loading
-- [ ] Support more style from  [GitHub syntax theme generators](https://github.com/primer/github-syntax-theme-generator)
+- [x] Support more styles
 - [x] Check input
+- [ ] Show spinner while loading
 
 ## Get started
 
@@ -17,7 +17,12 @@ Supposed you want to embed this README file whose URL is `https://github.com/yus
 
 https://blog.yusanshi.com/2019-12-17-emgithub/#%E6%B5%8B%E8%AF%95
 
+## Known issues
+- Different style in one page is not supported
+
+PR is always welcomed.
+
 ## Credits
+- [Highlight.js](https://github.com/highlightjs/highlight.js/) - Javascript syntax highlighter;
 - [PostScribe](https://github.com/krux/postscribe) - Asynchronously write javascript;
-- CSS from [GitHub syntax theme generators](https://github.com/primer/github-syntax-theme-generator);
 - Icons made by [Vectors Market](https://www.flaticon.com/authors/vectors-market) from [www.flaticon.com](https://www.flaticon.com/).
