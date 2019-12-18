@@ -29,7 +29,11 @@ function embed() {
     for (var i = 0; i < allDiv.length; i++) {
       // Avoid duplicate when the same code is embeded more than once
       if (!allDiv[i].hasChildNodes()) {
-        allDiv[i].innerHTML = `<pre><code>${text}</code></pre>`;
+        var pre = document.createElement("pre");
+        var code = document.createElement("code");
+        code.textContent = text;
+        pre.appendChild(code);
+        allDiv[i].appendChild(pre);
         hljs.highlightBlock(allDiv[i]);
         console.log(`Code "${text.slice(0, 30)}..." is written and highlighted`);
       } else {
@@ -41,8 +45,7 @@ function embed() {
     var allDiv = document.getElementsByClassName(pathSplit.join("-"));
     for (var i = 0; i < allDiv.length; i++) {
       if (!allDiv[i].hasChildNodes()) {
-        allDiv[i].innerHTML = `<pre><code>Failed to fetch ${rawFile}: ${error.message}</code></pre>`;
-        hljs.highlightBlock(allDiv[i]);
+        allDiv[i].textContent = `Failed to fetch ${rawFile}: ${error.message}`;
       }
     };
   });
