@@ -1,6 +1,10 @@
 # Embed Like Gist
 
-Embed file on Github just like [Github Gist](https://gist.github.com/). https://emgithub.com/
+https://emgithub.com/
+
+Embed file on Github just like [Github Gist](https://gist.github.com/). 
+
+Blog: https://blog.yusanshi.com/2019-12-17-emgithub/
 
 - [x] Support more styles
 - [x] Check input
