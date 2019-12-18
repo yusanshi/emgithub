@@ -5,6 +5,7 @@ Embed file on Github just like [Github Gist](https://gist.github.com/).
 - [x] Support more styles
 - [x] Check input
 - [ ] Show spinner while loading
+- [ ] Add optional footer
 
 ## Get started
 
@@ -18,6 +19,7 @@ Supposed you want to embed this README file whose URL is `https://github.com/yus
 https://blog.yusanshi.com/2019-12-17-emgithub/#%E6%B5%8B%E8%AF%95
 
 ## Known issues
+
 - Different style in one page is not supported
 
 PR is always welcomed.

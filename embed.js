@@ -11,14 +11,14 @@ function embed() {
   var file = pathSplit.slice(5, pathSplit.length).join("/");
   var rawFile = `https://raw.githubusercontent.com/${user}/${repository}/${branch}/${file}`;
 
-  // For Highlight.js
+  // Load Highlight.js, reserve space for codeArea
+  // reserving space for codeArea should be done earlier than loading of Highlight.js
+  // To avoid `Found 0 div` problem.
   document.write(`
+  <div class="${pathSplit.join("-")}"></div>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/styles/${style}.min.css">
   <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/highlight.min.js"></script>
   `);
-
-  // Reserve space for code
-  document.write(`<div class="${pathSplit.join("-")}"></div>`);
 
   fetch(rawFile).then(function (response) {
     return response.text()
