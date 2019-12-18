@@ -26,28 +26,30 @@ function embed() {
   }).then(function (text) {
     console.log(`Succeeded in fetching ${rawFile}`);
     var allDiv = document.getElementsByClassName(pathSplit.join("-"));
-    console.log(`Found ${allDiv.length} div`);
     for (var i = 0; i < allDiv.length; i++) {
       if (allDiv[i].getElementsByClassName("lds-ring").length) {
         var pre = document.createElement("pre");
         var code = document.createElement("code");
         code.textContent = text;
+        hljs.highlightBlock(code);
         pre.appendChild(code);
         allDiv[i].innerHTML = "";
         allDiv[i].appendChild(pre);
-        hljs.highlightBlock(allDiv[i]);
-        console.log(`Code "${text.slice(0, 30)}..." is written and highlighted`);
-      } else {
-        console.log(`Already written. Skipp writing code "${text.slice(0, 30)}..."`);
       }
-    };
+    }
   }).catch(function (error) {
-    console.log(`Fail to fetch ${rawFile}: ${error.message}`);
+    console.log(`Failed to write ${rawFile}: ${error.message}`);
     var allDiv = document.getElementsByClassName(pathSplit.join("-"));
     for (var i = 0; i < allDiv.length; i++) {
-      if (!allDiv[i].hasChildNodes()) {
-        allDiv[i].textContent = `Failed to fetch ${rawFile}: ${error.message}`;
+      if (allDiv[i].getElementsByClassName("lds-ring").length) {
+        var pre = document.createElement("pre");
+        var code = document.createElement("code");
+        code.textContent = `Failed to write ${rawFile}: ${error.message}`;
+        hljs.highlightBlock(code);
+        pre.appendChild(code);
+        allDiv[i].innerHTML = "";
+        allDiv[i].appendChild(pre);
       }
-    };
+    }
   });
 }
