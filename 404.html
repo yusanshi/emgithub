@@ -12,8 +12,17 @@
     <script src="https://cdn.jsdelivr.net/npm/postscribe@2.0.8/dist/postscribe.min.js"></script>
     <title>Embed Like Gist</title>
     <style>
+        /* Fixed sidebar */
         html {
             overflow-y: scroll;
+        }
+
+        /* Remove validation icon for small device */
+        @media (max-width: 767.98px) {
+            .form-control.is-valid,
+            .form-control.is-invalid {
+                background-image: none;
+            }
         }
     </style>
     <script>
@@ -99,7 +108,7 @@
                     href="https://github.com/yusanshi/embed_like_gist">giving me a Star</a>.</p>
             <form id="goForm">
                 <div class="input-group input-group-lg">
-                    <input type="text" id="target" class="form-control">
+                    <input type="text" id="target" class="form-control" required>
                     <select id="style" class="custom-select col-3 col-md-2">
                         <option value="a11y-dark">a11y-dark</option>
                         <option value="a11y-light">a11y-light</option>
@@ -209,7 +218,7 @@
                 </div>
             </div>
             <br>
-            <label for="codeArea">Preview</label>
+            <label for="previewArea">Preview</label>
             <div id="previewArea"></div>
         </div>
         </div>
