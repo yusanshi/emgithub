@@ -4,7 +4,7 @@ https://emgithub.com/
 
 Embed file on Github just like [Github Gist](https://gist.github.com/). 
 
-Blog: https://blog.yusanshi.com/2019-12-17-emgithub/
+Related post: https://blog.yusanshi.com/2019-12-17-emgithub/
 
 - [x] Support more styles
 - [x] Check input
@@ -26,6 +26,7 @@ https://blog.yusanshi.com/2019-12-17-emgithub/#%E6%B5%8B%E8%AF%95
 ## Known issues
 
 - Different style in one page is not supported
+- Sometimes first embeded code is not highlighted
 
 PR is always welcomed.
 
