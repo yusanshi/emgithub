@@ -1,11 +1,12 @@
 # Embed Like Gist
 
-Embed file on Github just like [Github Gist](https://gist.github.com/).
+Embed file on Github just like [Github Gist](https://gist.github.com/). https://emgithub.com/
 
 - [x] Support more styles
 - [x] Check input
 - [ ] Show spinner while loading
 - [ ] Add optional footer
+- [ ] Line count
 
 ## Get started
 
