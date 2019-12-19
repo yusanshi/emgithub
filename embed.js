@@ -22,7 +22,10 @@ function embed() {
   `);
 
   fetch(rawFile).then(function (response) {
-    return response.text()
+    if (response.ok) {
+      return response.text();
+    }
+    throw new Error(`Response was not ok: ${response.status} ${response.statusText}`);
   }).then(function (text) {
     console.log(`Succeeded in fetching ${rawFile}`);
     var allDiv = document.getElementsByClassName(pathSplit.join("-"));
