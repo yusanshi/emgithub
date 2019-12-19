@@ -25,7 +25,7 @@ function embed() {
     if (response.ok) {
       return response.text();
     }
-    throw new Error(`Response was not ok: ${response.status} ${response.statusText}`);
+    throw new Error(`${response.status} ${response.statusText}`);
   }).then(function (text) {
     console.log(`Succeeded in fetching ${rawFile}`);
     var allDiv = document.getElementsByClassName(pathSplit.join("-"));
@@ -57,13 +57,13 @@ function embed() {
       }
     }
   }).catch(function (error) {
-    console.log(`Failed to write ${rawFile}: ${error.message}`);
+    console.log(`Failed to process ${rawFile}: ${error.message}`);
     var allDiv = document.getElementsByClassName(pathSplit.join("-"));
     for (var i = 0; i < allDiv.length; i++) {
       if (allDiv[i].getElementsByClassName("lds-ring").length) {
         var pre = document.createElement("pre");
         var code = document.createElement("code");
-        code.textContent = `Failed to write ${rawFile}: ${error.message}`;
+        code.textContent = `Failed to process ${rawFile}: ${error.message}`;
         pre.appendChild(code);
         allDiv[i].innerHTML = "";
         allDiv[i].appendChild(pre);
