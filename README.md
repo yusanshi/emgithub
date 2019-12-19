@@ -2,7 +2,7 @@
 
 https://emgithub.com/
 
-Embed file on Github just like [Github Gist](https://gist.github.com/). 
+Embed a file from Github repository just like [Github Gist](https://gist.github.com/). 
 
 Related post: https://blog.yusanshi.com/2019-12-17-emgithub/
 
