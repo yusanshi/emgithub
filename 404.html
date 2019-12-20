@@ -33,14 +33,13 @@
 
             $("#goForm").on("submit", function (e) {
                 e.preventDefault();
-                var target = $("#target").val();
-                var pattern = /^(https|http):\/\/github\.com(\/[A-Za-z0-9_\-\.]+){2}\/(tree|blob)\/[A-Za-z0-9_\-\.]+\//;
+                const target = $("#target").val();
+                const pattern = /^(https|http):\/\/github\.com(\/[A-Za-z0-9_\-\.]+){2}\/(tree|blob)\/[A-Za-z0-9_\-\.]+\//;
                 if (pattern.test(target)) {
                     $("#target").removeClass("is-invalid");
                     $("#target").addClass("is-valid");
-                    console.log(`Input information: ${$(this).serialize()}`);
-                    var jsURL = `${window.location.protocol}//${window.location.host}/embed.js?${$(this).serialize()}`;
-                    var scriptTag = `<script src=\"${jsURL}\"><\/script>`;
+                    const jsURL = `${window.location.protocol}//${window.location.host}/embed.js?${$(this).serialize()}`;
+                    const scriptTag = `<script src=\"${jsURL}\"><\/script>`;
                     $("#embededCode").val(scriptTag);
                     document.getElementById("previewArea").innerHTML = "";
                     postscribe("#previewArea", scriptTag);
@@ -81,7 +80,7 @@
         }
 
         function fallbackCopyTextToClipboard(text) {
-            var textArea = document.createElement("textarea");
+            const textArea = document.createElement("textarea");
             textArea.value = text;
             textArea.style.position = "fixed"; //avoid scrolling to bottom
             document.body.appendChild(textArea);
@@ -89,8 +88,8 @@
             textArea.select();
 
             try {
-                var successful = document.execCommand('copy');
-                var msg = successful ? 'successful' : 'unsuccessful';
+                const successful = document.execCommand('copy');
+                const msg = successful ? 'successful' : 'unsuccessful';
                 console.log('Fallback: Copying text command was ' + msg);
             } catch (err) {
                 console.error('Fallback: Oops, unable to copy', err);
@@ -209,16 +208,16 @@
                     <div class="invalid-feedback mt-2">Invalid URL.</div>
                 </div>
                 <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" name="lineNumbers" id="lineNumbers" disabled>
+                    <input type="checkbox" class="custom-control-input" name="border" id="border" checked>
+                    <label class="custom-control-label" for="border">Border</label>
+                </div>
+                <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" name="lineNumbers" id="lineNumbers">
                     <label class="custom-control-label" for="lineNumbers">Line
                         numbers</label>
                 </div>
                 <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" name="border" id="border" disabled>
-                    <label class="custom-control-label" for="border">Border</label>
-                </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" name="fileSource" id="fileSource" disabled>
+                    <input type="checkbox" class="custom-control-input" name="fileSource" id="fileSource">
                     <label class="custom-control-label" for="fileSource">File source</label>
                 </div>
                 <small class="form-text text-muted">These options are in developing.</small>

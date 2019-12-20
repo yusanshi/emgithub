@@ -35,4 +35,5 @@ PR is always welcomed.
 - [Highlight.js](https://github.com/highlightjs/highlight.js/) - Javascript syntax highlighter;
 - [PostScribe](https://github.com/krux/postscribe) - Asynchronously write javascript;
 - Icons made by [Vectors Market](https://www.flaticon.com/authors/vectors-market) and [Dave Gandy](https://www.flaticon.com/authors/dave-gandy) from [www.flaticon.com](https://www.flaticon.com/);
-- Loading animation by [Loading.io](https://loading.io/).
+- Loading animation by [Loading.io](https://loading.io/);
+- CSS style based on [GitHub syntax theme generators](https://github.com/primer/github-syntax-theme-generator).
