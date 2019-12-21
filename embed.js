@@ -15,7 +15,6 @@ function embed() {
   const file = pathSplit.slice(5, pathSplit.length).join("/");
   const rawFile = `https://raw.githubusercontent.com/${user}/${repository}/${branch}/${file}`;
 
-  // Add Highlight.js, CSS for spinner, and reserve space for code area
   // Reserving space for code area should be done in early time
   // or the div may not be found later
   document.write(`
