@@ -1,15 +1,38 @@
-.file-border {
-  border: 1px solid;
-  border-color: #ddd #ddd #ccc;
+.file-container {
+  margin-bottom: 1em;
+  border: 1px solid #ddd;
   border-radius: 3px;
 }
 
 .file-meta {
+  border-top: 1px solid #ddd;
   padding: 10px;
   overflow: hidden;
   font: 12px -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,
     sans-serif, Apple Color Emoji, Segoe UI Emoji;
+}
+
+.file-meta-light {
   color: #586069;
   background-color: #f7f7f7;
-  border-radius: 0 0 2px 2px;
 }
+
+.file-meta-dark {
+  color: #f7f7f7;
+  background-color: #586069;
+}
+
+.file-meta-light a {
+  font-weight: 600;
+  color: #666;
+  text-decoration: none;
+  border: 0;
+}
+
+.file-meta-dark a {
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  border: 0;
+}
+
