@@ -5,7 +5,9 @@ function embed() {
   const className = params.toString();
   const target = new URL(params.get("target"));
   const style = params.get("style");
-  const isDarkStyle = style.includes("dark");
+  const trickyDarkStyle = ["an-old-hope", "androidstudio", "arta", "codepen-embed", "darcula", "far", "gml", "hopscotch", "hybrid", "monokai", "monokai-sublime", "nord", "obsidian", "ocean", "railscasts", "rainbow", "shades-of-purple", "sunburst", "vs2015", "xt256", "zenburn"]; // dark styles without 'dark', 'black' or 'night' in its name
+  const isDarkStyle = style.includes("dark") || style.includes("black") || style.includes("night") || trickyDarkStyle.includes(style);
+  const showBorder = params.get("showBorder") == "on";
   const showLineNumbers = params.get("showLineNumbers") == "on";
   const showFileMeta = params.get("showFileMeta") == "on";
   const pathSplit = target.pathname.split("/");
@@ -40,12 +42,12 @@ function embed() {
           const hljsScript = document.createElement("script");
           hljsScript.onload = function () {
             console.log("Succeeded reloading highlight.js");
-            embedCodeToTarget(allDiv[i], text, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL);
+            embedCodeToTarget(allDiv[i], text, showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL);
           }
           hljsScript.src = "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/highlight.min.js";
           allDiv[i].insertAdjacentElement("afterend", hljsScript);
         } else {
-          embedCodeToTarget(allDiv[i], text, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL);
+          embedCodeToTarget(allDiv[i], text, showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL);
         }
       }
     }
@@ -56,16 +58,29 @@ Error: ${error.message}`;
     const allDiv = document.getElementsByClassName(className);
     for (let i = 0; i < allDiv.length; i++) {
       if (allDiv[i].getElementsByClassName("lds-ring").length) {
-        embedCodeToTarget(allDiv[i], errorMsg, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL, 'plaintext');
+        embedCodeToTarget(allDiv[i], errorMsg, showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL, 'plaintext');
       }
     }
   });
 }
 
-function embedCodeToTarget(targetDiv, codeText, showLineNumbers, showFileMeta, isDarkStyle, fileURL, rawFileURL, extra_class) {
+function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, showFileMeta, isDarkStyle, fileURL, rawFileURL, extra_class) {
   const pre = document.createElement("pre");
-  pre.setAttribute("style", "margin: 0;")
+  pre.style.margin = "0rem";
   const code = document.createElement("code");
+  code.style.padding = "1rem";
+  if (showFileMeta) {
+    code.style.borderRadius = "0.3rem 0.3rem 0 0";
+  } else {
+    code.style.borderRadius = "0.3rem";
+  }
+  if (showBorder) {
+    if (!isDarkStyle) {
+      code.style.border = "1px solid #ddd";
+    } else {
+      code.style.border = "1px solid #555";
+    }
+  }
   if (extra_class) {
     code.classList.add(extra_class);
   }
@@ -75,7 +90,6 @@ function embedCodeToTarget(targetDiv, codeText, showLineNumbers, showFileMeta, i
   const fileContainer = document.createElement("div");
   const fileBody = document.createElement("div");
   const fileMeta = document.createElement("div");
-  fileContainer.classList.add("file-container");
   fileBody.classList.add("file-body");
   if (showLineNumbers) {
     //TODO fileBody and pre
@@ -84,12 +98,20 @@ function embedCodeToTarget(targetDiv, codeText, showLineNumbers, showFileMeta, i
     const fileURLSplit = fileURL.split("/");
     fileMeta.innerHTML = `<a target="_blank" href="${rawFileURL}" style="float:right">view raw</a>
     <a target="_blank" href="${fileURL}">${fileURLSplit[fileURLSplit.length - 1]}</a>
-    Powered by <a target="_blank" href="https://emgithub.com">EmGithub.com</a>`
+    delivered with ❤ by <a target="_blank" href="https://emgithub.com">EmGithub</a>`
     fileMeta.classList.add("file-meta");
     if (!isDarkStyle) {
       fileMeta.classList.add("file-meta-light");
+      if (showBorder) {
+        fileMeta.style.border = "1px solid #ddd";
+        fileMeta.style.borderTop = "0px";
+      }
     } else {
       fileMeta.classList.add("file-meta-dark");
+      if (showBorder) {
+        fileMeta.style.border = "1px solid #555";
+        fileMeta.style.borderTop = "0px";
+      }
     }
   }
   fileBody.appendChild(pre);

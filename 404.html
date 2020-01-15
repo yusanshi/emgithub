@@ -19,7 +19,6 @@
 
         /* Remove validation icon for small device */
         @media (max-width: 767.98px) {
-
             .form-control.is-valid,
             .form-control.is-invalid {
                 background-image: none;
@@ -208,9 +207,12 @@
                     <div class="invalid-feedback mt-2">Invalid URL.</div>
                 </div>
                 <div class="custom-control custom-checkbox custom-control-inline">
+                    <input type="checkbox" class="custom-control-input" name="showBorder" id="showBorder" checked>
+                    <label class="custom-control-label" for="showBorder">Border</label>
+                </div>
+                <div class="custom-control custom-checkbox custom-control-inline">
                     <input type="checkbox" class="custom-control-input" name="showLineNumbers" id="showLineNumbers">
-                    <label class="custom-control-label" for="showLineNumbers">Line
-                        numbers</label>
+                    <label class="custom-control-label" for="showLineNumbers">Line numbers</label>
                 </div>
                 <div class="custom-control custom-checkbox custom-control-inline">
                     <input type="checkbox" class="custom-control-input" name="showFileMeta" id="showFileMeta">

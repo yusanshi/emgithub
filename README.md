@@ -9,7 +9,7 @@ Related post: https://blog.yusanshi.com/2019-12-17-emgithub/
 - [x] Support more styles
 - [x] Check input
 - [x] Show spinner while loading
-- [ ] Add optional footer
+- [x] Add metadata
 - [ ] Line count
 - [ ] Beautify transition
 
