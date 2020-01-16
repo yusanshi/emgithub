@@ -23,47 +23,54 @@ function embed() {
   <style>.lds-ring{margin:1rem auto;position:relative;width:60px;height:60px}.lds-ring div{box-sizing:border-box;display:block;position:absolute;width:48px;height:48px;margin:6px;border:6px solid #fff;border-radius:50%;animation:lds-ring 1.2s cubic-bezier(0.5,0,0.5,1) infinite;border-color:#888 transparent transparent transparent}.lds-ring div:nth-child(1){animation-delay:-.45s}.lds-ring div:nth-child(2){animation-delay:-.3s}.lds-ring div:nth-child(3){animation-delay:-.15s}@keyframes lds-ring{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>
   <div class="${className}"><div class="lds-ring"><div></div><div></div><div></div><div></div></div></div>
   <style>.hljs-ln-numbers{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;text-align:right;color:#ccc;vertical-align:top}.hljs-ln td.hljs-ln-numbers{padding-right:1.25rem}</style>
-  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/highlight.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js@2.7.0/dist/highlightjs-line-numbers.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/styles/${style}.min.css">
   <link rel="stylesheet" href="https://emgithub.com/main.css">
   `);
 
-  fetch(rawFileURL).then(function (response) {
+  // 1. Only try to load hljs or hljs-num when not loaded
+  // 2. hljs-num should be loaded only after hljs is loaded
+  const HLJSURL = "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/highlight.min.js";
+  const HLJSNumURL = "https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js@2.7.0/dist/highlightjs-line-numbers.min.js";
+  const loadHLJS = (typeof hljs != "undefined" && typeof hljs.highlightBlock != "undefined") ?
+    Promise.resolve() : loadScript(HLJSURL);
+  const loadJS = showLineNumbers ?
+    loadHLJS.then(function () {
+      return (typeof hljs != "undefined" && typeof hljs.lineNumbersBlock != "undefined") ?
+        Promise.resolve() : loadScript(HLJSNumURL)
+    }) : loadHLJS;
+  const fetchFile = fetch(rawFileURL).then(function (response) {
     if (response.ok) {
       return response.text();
     }
-    throw new Error(`${response.status} ${response.statusText}`);
-  }).then(function (text) {
-    console.log(`Succeeded in fetching ${rawFileURL}`);
+    return Promise.reject(`${response.status} ${response.statusText}`);
+  });
+
+  Promise.all([loadJS, fetchFile]).then(function (result) {
     const allDiv = document.getElementsByClassName(className);
     for (let i = 0; i < allDiv.length; i++) {
       if (allDiv[i].getElementsByClassName("lds-ring").length) {
-        if (typeof hljs == "undefined" || typeof hljs.highlightBlock == "undefined" || typeof hljs.lineNumbersBlock == "undefined") {
-          //TODO
-          console.log("Trying to reload highlight");
-          const hljsScript = document.createElement("script");
-          hljsScript.onload = function () {
-            console.log("Succeeded reloading highlight.js");
-            embedCodeToTarget(allDiv[i], text, showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL);
-          }
-          hljsScript.src = "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/highlight.min.js";
-          allDiv[i].insertAdjacentElement("afterend", hljsScript);
-        } else {
-          embedCodeToTarget(allDiv[i], text, showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL);
-        }
+        embedCodeToTarget(allDiv[i], result[1], showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL);
       }
     }
   }).catch(function (error) {
     const errorMsg = `Failed to process ${rawFileURL}
-Error: ${error.message}`;
-    console.log(errorMsg);
+Error: ${error}`;
     const allDiv = document.getElementsByClassName(className);
     for (let i = 0; i < allDiv.length; i++) {
       if (allDiv[i].getElementsByClassName("lds-ring").length) {
         embedCodeToTarget(allDiv[i], errorMsg, showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL, 'plaintext');
       }
     }
+  });
+}
+
+function loadScript(src) {
+  return new Promise(function (resolve, reject) {
+    const script = document.createElement('script');
+    script.src = src;
+    script.onload = resolve;
+    script.onerror = reject;
+    document.head.appendChild(script);
   });
 }
 
@@ -88,15 +95,18 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
     code.classList.add(extra_class);
   }
   code.textContent = codeText;
-  hljs.highlightBlock(code);
-  if (showLineNumbers) {
-    hljs.lineNumbersBlock(code);
+  if (typeof hljs != "undefined" && typeof hljs.highlightBlock != "undefined") {
+    hljs.highlightBlock(code);
+  }
+  if (typeof hljs != "undefined" && typeof hljs.lineNumbersBlock != "undefined") {
+    if (showLineNumbers) {
+      hljs.lineNumbersBlock(code);
+    }
   }
   pre.appendChild(code);
   const fileContainer = document.createElement("div");
   const fileBody = document.createElement("div");
   const fileMeta = document.createElement("div");
-  fileBody.classList.add("file-body");
   if (showFileMeta) {
     const fileURLSplit = fileURL.split("/");
     fileMeta.innerHTML = `<a target="_blank" href="${rawFileURL}" style="float:right">view raw</a>
