@@ -108,7 +108,7 @@
                 You can also simply add "em" before
                 "github.com" in address bar. If you find this helpful, consider <a target="_blank"
                     href="https://github.com/yusanshi/embed_like_gist">giving me a Star</a>.</p>
-            <form id="goForm">
+            <form id="goForm" class="mb-4">
                 <div class="input-group input-group-lg mb-3">
                     <input type="text" name="target" id="target" class="form-control" required>
                     <select id="style" name="style" class="custom-select col-3 col-md-2">
@@ -220,10 +220,8 @@
                     <label class="custom-control-label" for="showFileMeta">File metadata</label>
                 </div>
             </form>
-            <br>
-            <br>
             <label for="embededCode">Code to embed</label>
-            <div class="input-group input-group-lg">
+            <div class="input-group input-group-lg mb-3">
                 <input type="text" id="embededCode" class="form-control" onclick="this.select();">
                 <div class="input-group-append">
                     <!-- Not use <button> here, see https://getbootstrap.com/docs/4.4/components/popovers/#dismiss-on-next-click -->
@@ -232,7 +230,6 @@
                         data-content="Copied!">Copy</a>
                 </div>
             </div>
-            <br>
             <label for="previewArea">Preview</label>
             <div id="previewArea" class="py-1"><img class="mx-auto d-block m-3" height="64" width="64"
                     src="https://emgithub.com/preview.svg"></div>
