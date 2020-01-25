@@ -41,8 +41,9 @@ function embed() {
   const fetchFile = fetch(rawFileURL).then(function (response) {
     if (response.ok) {
       return response.text();
+    } else {
+      return Promise.reject(`${response.status} ${response.statusText}`);
     }
-    return Promise.reject(`${response.status} ${response.statusText}`);
   });
 
   Promise.all([loadJS, fetchFile]).then(function (result) {
@@ -54,7 +55,7 @@ function embed() {
     }
   }).catch(function (error) {
     const errorMsg = `Failed to process ${rawFileURL}
-Error: ${error}`;
+${error}`;
     const allDiv = document.getElementsByClassName(className);
     for (let i = 0; i < allDiv.length; i++) {
       if (allDiv[i].getElementsByClassName("lds-ring").length) {
