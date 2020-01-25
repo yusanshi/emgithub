@@ -28,3 +28,10 @@
 .file-meta-dark a {
   color: #fff;
 }
+
+/* hide content for small device */
+@media (max-width: 575.98px) {
+  .hide-in-phone {
+    display: none;
+  }
+}
