@@ -2,247 +2,300 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="icon" type="image/png" href="https://emgithub.com/favicon.png" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/postscribe@2.0.8/dist/postscribe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/highlight.min.js"></script>
-    <script
-        src="https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js@2.7.0/dist/highlightjs-line-numbers.min.js"></script>
-    <title>Embed Like Gist</title>
-    <style>
-        /* Fixed sidebar */
-        html {
-            overflow-y: scroll;
-        }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="icon" type="image/png" href="https://emgithub.com/favicon.png" />
+  <title>Embed Like Gist</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+  <style>
+    /* Fixed sidebar */
+    html {
+      overflow-y: scroll;
+    }
 
-        /* Remove validation icon for small device */
-        @media (max-width: 767.98px) {
+    /* Remove validation icon for small device */
+    @media (max-width: 767.98px) {
 
-            .form-control.is-valid,
-            .form-control.is-invalid {
-                background-image: none;
-            }
-        }
-    </style>
-    <script>
-        $(function () {
-            // Initialize popovers
-            $('[data-toggle="popover"]').popover();
-            $("#goForm").on("submit", function (e) {
-                e.preventDefault();
-                const target = $("#target").val();
-                const pattern = /^(https|http):\/\/github\.com(\/[A-Za-z0-9_\-\.]+){2}\/(tree|blob)\/[A-Za-z0-9_\-\.]+\//;
-                if (pattern.test(target)) {
-                    $("#target").removeClass("is-invalid");
-                    $("#target").addClass("is-valid");
-                    const jsURL = `${window.location.protocol}//${window.location.host}/embed.js?${$(this).serialize()}`;
-                    const scriptTag = `<script src=\"${jsURL}\"><\/script>`;
-                    $("#embededCode").val(scriptTag);
-                    document.getElementById("previewArea").innerHTML = `<style>.lds-ring{margin:1rem auto;position:relative;width:60px;height:60px}.lds-ring div{box-sizing:border-box;display:block;position:absolute;width:48px;height:48px;margin:6px;border:6px solid #fff;border-radius:50%;animation:lds-ring 1.2s cubic-bezier(0.5,0,0.5,1) infinite;border-color:#888 transparent transparent transparent}.lds-ring div:nth-child(1){animation-delay:-.45s}.lds-ring div:nth-child(2){animation-delay:-.3s}.lds-ring div:nth-child(3){animation-delay:-.15s}@keyframes lds-ring{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>
-  <div><div class="lds-ring"><div></div><div></div><div></div><div></div></div></div>`;
-                    postscribe("#previewArea", scriptTag, {
-                        beforeWrite: function (str) {
-                            document.getElementById("previewArea").innerHTML = "";
-                            return str;
-                        }
-                    });
-                } else {
-                    $("#target").removeClass("is-valid");
-                    $("#target").addClass("is-invalid");
-                }
-            });
-
-
-            $("#copyButton").on("click", function (e) {
-                e.preventDefault();
-                copyTextToClipboard($("#embededCode").val());
-            });
-
-            if (["/", "/index.html", "/index.htm"].includes(window.location.pathname)) {
-                // Is entering the site directly
-                $("#target").attr("placeholder", "https://github.com/user/repository/blob/branch/src/hello.cpp");
-            } else {
-                // 404 triggered. Fill in target and simulate clicking
-                $("#target").val("https://github.com" + window.location.pathname);
-                $("#goForm").submit();
-            }
-
-        });
-
-        // https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
-        function copyTextToClipboard(text) {
-            if (!navigator.clipboard) {
-                fallbackCopyTextToClipboard(text);
-                return;
-            }
-            navigator.clipboard.writeText(text).then(function () {
-                console.log('Async: Copying to clipboard was successful!');
-            }, function (err) {
-                console.error('Async: Could not copy text: ', err);
-            });
-        }
-
-        function fallbackCopyTextToClipboard(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed"; //avoid scrolling to bottom
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-
-            try {
-                const successful = document.execCommand('copy');
-                const msg = successful ? 'successful' : 'unsuccessful';
-                console.log('Fallback: Copying text command was ' + msg);
-            } catch (err) {
-                console.error('Fallback: Oops, unable to copy', err);
-            }
-            document.body.removeChild(textArea);
-        }
-
-    </script>
+      .form-control.is-valid,
+      .form-control.is-invalid {
+        background-image: none;
+      }
+    }
+  </style>
 </head>
 
 <body>
-    <main role="main" class="container pt-3">
-        <div class="jumbotron">
-            <h1>Embed Like Gist</h1>
-            <p class="lead">Embed a file from Github repository just like <a target="_blank"
-                    href="https://gist.github.com/">Github Gist</a>.<br>Paste URL of the file you would like to embed.
-                You can also simply add "em" before
-                "github.com" in address bar. If you find this helpful, consider <a target="_blank"
-                    href="https://github.com/yusanshi/embed_like_gist">giving me a Star</a>.</p>
-            <form id="goForm" class="mb-4">
-                <div class="input-group input-group-lg mb-3">
-                    <input type="text" name="target" id="target" class="form-control" required>
-                    <select id="style" name="style" class="custom-select col-3 col-md-2">
-                        <option value="a11y-dark">a11y-dark</option>
-                        <option value="a11y-light">a11y-light</option>
-                        <option value="agate">agate</option>
-                        <option value="an-old-hope">an-old-hope</option>
-                        <option value="androidstudio">androidstudio</option>
-                        <option value="arduino-light">arduino-light</option>
-                        <option value="arta">arta</option>
-                        <option value="ascetic">ascetic</option>
-                        <option value="atelier-cave-dark">atelier-cave-dark</option>
-                        <option value="atelier-cave-light">atelier-cave-light</option>
-                        <option value="atelier-dune-dark">atelier-dune-dark</option>
-                        <option value="atelier-dune-light">atelier-dune-light</option>
-                        <option value="atelier-estuary-dark">atelier-estuary-dark</option>
-                        <option value="atelier-estuary-light">atelier-estuary-light</option>
-                        <option value="atelier-forest-dark">atelier-forest-dark</option>
-                        <option value="atelier-forest-light">atelier-forest-light</option>
-                        <option value="atelier-heath-dark">atelier-heath-dark</option>
-                        <option value="atelier-heath-light">atelier-heath-light</option>
-                        <option value="atelier-lakeside-dark">atelier-lakeside-dark</option>
-                        <option value="atelier-lakeside-light">atelier-lakeside-light</option>
-                        <option value="atelier-plateau-dark">atelier-plateau-dark</option>
-                        <option value="atelier-plateau-light">atelier-plateau-light</option>
-                        <option value="atelier-savanna-dark">atelier-savanna-dark</option>
-                        <option value="atelier-savanna-light">atelier-savanna-light</option>
-                        <option value="atelier-seaside-dark">atelier-seaside-dark</option>
-                        <option value="atelier-seaside-light">atelier-seaside-light</option>
-                        <option value="atelier-sulphurpool-dark">atelier-sulphurpool-dark</option>
-                        <option value="atelier-sulphurpool-light">atelier-sulphurpool-light</option>
-                        <option value="atom-one-dark">atom-one-dark</option>
-                        <option value="atom-one-dark-reasonable">atom-one-dark-reasonable</option>
-                        <option value="atom-one-light">atom-one-light</option>
-                        <option value="codepen-embed">codepen-embed</option>
-                        <option value="color-brewer">color-brewer</option>
-                        <option value="darcula">darcula</option>
-                        <option value="dark">dark</option>
-                        <option value="default" selected>default</option>
-                        <option value="docco">docco</option>
-                        <option value="dracula">dracula</option>
-                        <option value="far">far</option>
-                        <option value="foundation">foundation</option>
-                        <option value="github">github</option>
-                        <option value="github-gist">github-gist</option>
-                        <option value="gml">gml</option>
-                        <option value="googlecode">googlecode</option>
-                        <option value="gradient-dark">gradient-dark</option>
-                        <option value="grayscale">grayscale</option>
-                        <option value="gruvbox-dark">gruvbox-dark</option>
-                        <option value="gruvbox-light">gruvbox-light</option>
-                        <option value="hopscotch">hopscotch</option>
-                        <option value="hybrid">hybrid</option>
-                        <option value="idea">idea</option>
-                        <option value="ir-black">ir-black</option>
-                        <option value="isbl-editor-dark">isbl-editor-dark</option>
-                        <option value="isbl-editor-light">isbl-editor-light</option>
-                        <option value="kimbie.dark">kimbie.dark</option>
-                        <option value="kimbie.light">kimbie.light</option>
-                        <option value="lightfair">lightfair</option>
-                        <option value="magula">magula</option>
-                        <option value="mono-blue">mono-blue</option>
-                        <option value="monokai">monokai</option>
-                        <option value="monokai-sublime">monokai-sublime</option>
-                        <option value="night-owl">night-owl</option>
-                        <option value="nord">nord</option>
-                        <option value="obsidian">obsidian</option>
-                        <option value="ocean">ocean</option>
-                        <option value="paraiso-dark">paraiso-dark</option>
-                        <option value="paraiso-light">paraiso-light</option>
-                        <option value="purebasic">purebasic</option>
-                        <option value="qtcreator_dark">qtcreator_dark</option>
-                        <option value="qtcreator_light">qtcreator_light</option>
-                        <option value="railscasts">railscasts</option>
-                        <option value="rainbow">rainbow</option>
-                        <option value="routeros">routeros</option>
-                        <option value="shades-of-purple">shades-of-purple</option>
-                        <option value="solarized-dark">solarized-dark</option>
-                        <option value="solarized-light">solarized-light</option>
-                        <option value="sunburst">sunburst</option>
-                        <option value="tomorrow">tomorrow</option>
-                        <option value="tomorrow-night">tomorrow-night</option>
-                        <option value="tomorrow-night-blue">tomorrow-night-blue</option>
-                        <option value="tomorrow-night-bright">tomorrow-night-bright</option>
-                        <option value="tomorrow-night-eighties">tomorrow-night-eighties</option>
-                        <option value="vs">vs</option>
-                        <option value="vs2015">vs2015</option>
-                        <option value="xcode">xcode</option>
-                        <option value="xt256">xt256</option>
-                        <option value="zenburn">zenburn</option>
-                    </select>
-                    <div class="input-group-append">
-                        <button class="btn btn-lg btn-primary" type="submit">Go</button>
-                    </div>
-                    <div class="invalid-feedback mt-2">Invalid URL.</div>
-                </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" name="showBorder" id="showBorder" checked>
-                    <label class="custom-control-label" for="showBorder">Border</label>
-                </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" name="showLineNumbers" id="showLineNumbers"
-                        checked>
-                    <label class="custom-control-label" for="showLineNumbers">Line numbers</label>
-                </div>
-                <div class="custom-control custom-checkbox custom-control-inline">
-                    <input type="checkbox" class="custom-control-input" name="showFileMeta" id="showFileMeta" checked>
-                    <label class="custom-control-label" for="showFileMeta">File metadata</label>
-                </div>
-            </form>
-            <label for="embededCode">Code to embed</label>
-            <div class="input-group input-group-lg mb-3">
-                <input type="text" id="embededCode" class="form-control" onclick="this.select();">
-                <div class="input-group-append">
-                    <!-- Not use <button> here, see https://getbootstrap.com/docs/4.4/components/popovers/#dismiss-on-next-click -->
-                    <a tabindex="0" class="btn btn-lg btn-outline-secondary" id="copyButton" role="button"
-                        data-toggle="popover" data-trigger="focus" data-placement="bottom"
-                        data-content="Copied!">Copy</a>
-                </div>
-            </div>
-            <label for="previewArea">Preview</label>
-            <div id="previewArea" class="py-1"><img class="mx-auto d-block m-3" height="64" width="64"
-                    src="https://emgithub.com/preview.svg"></div>
+  <main role="main" class="container py-5">
+    <h1>Embed Like Gist</h1>
+    <p class="lead">Embed a file from Github repository just like <a target="_blank"
+        href="https://gist.github.com/">Github Gist</a>.<br>Paste URL of the file you would like to embed.
+      You can also simply add "em" before
+      "github.com" in address bar.</p>
+    <form id="goForm" class="mb-4">
+      <div class="input-group input-group-lg mb-3">
+        <input type="text" name="target" id="target" class="form-control" required>
+        <select id="style" name="style" class="custom-select col-3 col-md-2">
+          <option value="a11y-dark">a11y-dark</option>
+          <option value="a11y-light">a11y-light</option>
+          <option value="agate">agate</option>
+          <option value="an-old-hope">an-old-hope</option>
+          <option value="androidstudio">androidstudio</option>
+          <option value="arduino-light">arduino-light</option>
+          <option value="arta">arta</option>
+          <option value="ascetic">ascetic</option>
+          <option value="atelier-cave-dark">atelier-cave-dark</option>
+          <option value="atelier-cave-light">atelier-cave-light</option>
+          <option value="atelier-dune-dark">atelier-dune-dark</option>
+          <option value="atelier-dune-light">atelier-dune-light</option>
+          <option value="atelier-estuary-dark">atelier-estuary-dark</option>
+          <option value="atelier-estuary-light">atelier-estuary-light</option>
+          <option value="atelier-forest-dark">atelier-forest-dark</option>
+          <option value="atelier-forest-light">atelier-forest-light</option>
+          <option value="atelier-heath-dark">atelier-heath-dark</option>
+          <option value="atelier-heath-light">atelier-heath-light</option>
+          <option value="atelier-lakeside-dark">atelier-lakeside-dark</option>
+          <option value="atelier-lakeside-light">atelier-lakeside-light</option>
+          <option value="atelier-plateau-dark">atelier-plateau-dark</option>
+          <option value="atelier-plateau-light">atelier-plateau-light</option>
+          <option value="atelier-savanna-dark">atelier-savanna-dark</option>
+          <option value="atelier-savanna-light">atelier-savanna-light</option>
+          <option value="atelier-seaside-dark">atelier-seaside-dark</option>
+          <option value="atelier-seaside-light">atelier-seaside-light</option>
+          <option value="atelier-sulphurpool-dark">atelier-sulphurpool-dark</option>
+          <option value="atelier-sulphurpool-light">atelier-sulphurpool-light</option>
+          <option value="atom-one-dark">atom-one-dark</option>
+          <option value="atom-one-dark-reasonable">atom-one-dark-reasonable</option>
+          <option value="atom-one-light">atom-one-light</option>
+          <option value="codepen-embed">codepen-embed</option>
+          <option value="color-brewer">color-brewer</option>
+          <option value="darcula">darcula</option>
+          <option value="dark">dark</option>
+          <option value="default" selected>default</option>
+          <option value="docco">docco</option>
+          <option value="dracula">dracula</option>
+          <option value="far">far</option>
+          <option value="foundation">foundation</option>
+          <option value="github">github</option>
+          <option value="github-gist">github-gist</option>
+          <option value="gml">gml</option>
+          <option value="googlecode">googlecode</option>
+          <option value="gradient-dark">gradient-dark</option>
+          <option value="grayscale">grayscale</option>
+          <option value="gruvbox-dark">gruvbox-dark</option>
+          <option value="gruvbox-light">gruvbox-light</option>
+          <option value="hopscotch">hopscotch</option>
+          <option value="hybrid">hybrid</option>
+          <option value="idea">idea</option>
+          <option value="ir-black">ir-black</option>
+          <option value="isbl-editor-dark">isbl-editor-dark</option>
+          <option value="isbl-editor-light">isbl-editor-light</option>
+          <option value="kimbie.dark">kimbie.dark</option>
+          <option value="kimbie.light">kimbie.light</option>
+          <option value="lightfair">lightfair</option>
+          <option value="magula">magula</option>
+          <option value="mono-blue">mono-blue</option>
+          <option value="monokai">monokai</option>
+          <option value="monokai-sublime">monokai-sublime</option>
+          <option value="night-owl">night-owl</option>
+          <option value="nord">nord</option>
+          <option value="obsidian">obsidian</option>
+          <option value="ocean">ocean</option>
+          <option value="paraiso-dark">paraiso-dark</option>
+          <option value="paraiso-light">paraiso-light</option>
+          <option value="purebasic">purebasic</option>
+          <option value="qtcreator_dark">qtcreator_dark</option>
+          <option value="qtcreator_light">qtcreator_light</option>
+          <option value="railscasts">railscasts</option>
+          <option value="rainbow">rainbow</option>
+          <option value="routeros">routeros</option>
+          <option value="shades-of-purple">shades-of-purple</option>
+          <option value="solarized-dark">solarized-dark</option>
+          <option value="solarized-light">solarized-light</option>
+          <option value="sunburst">sunburst</option>
+          <option value="tomorrow">tomorrow</option>
+          <option value="tomorrow-night">tomorrow-night</option>
+          <option value="tomorrow-night-blue">tomorrow-night-blue</option>
+          <option value="tomorrow-night-bright">tomorrow-night-bright</option>
+          <option value="tomorrow-night-eighties">tomorrow-night-eighties</option>
+          <option value="vs">vs</option>
+          <option value="vs2015">vs2015</option>
+          <option value="xcode">xcode</option>
+          <option value="xt256">xt256</option>
+          <option value="zenburn">zenburn</option>
+        </select>
+        <div class="input-group-append">
+          <button class="btn btn-lg btn-primary" type="submit">Go</button>
         </div>
-    </main>
+        <div class="invalid-feedback mt-2">Invalid URL.</div>
+      </div>
+      <div class="custom-control custom-checkbox custom-control-inline">
+        <input type="checkbox" class="custom-control-input" name="showBorder" id="showBorder" checked>
+        <label class="custom-control-label" for="showBorder">Border</label>
+      </div>
+      <div class="custom-control custom-checkbox custom-control-inline">
+        <input type="checkbox" class="custom-control-input" name="showLineNumbers" id="showLineNumbers" checked>
+        <label class="custom-control-label" for="showLineNumbers">Line numbers</label>
+      </div>
+      <div class="custom-control custom-checkbox custom-control-inline">
+        <input type="checkbox" class="custom-control-input" name="showFileMeta" id="showFileMeta" checked>
+        <label class="custom-control-label" for="showFileMeta">File metadata</label>
+      </div>
+    </form>
+    <label for="embededCode">Code to embed</label>
+    <div class="input-group input-group-lg mb-3">
+      <input type="text" id="embededCode" class="form-control" onclick="this.select();">
+      <div class="input-group-append">
+        <!-- Not use <button> here, see https://getbootstrap.com/docs/4.4/components/popovers/#dismiss-on-next-click -->
+        <a tabindex="0" class="btn btn-lg btn-outline-secondary" id="copyButton" role="button" data-toggle="popover"
+          data-trigger="focus" data-placement="bottom" data-content="Copied!">Copy</a>
+      </div>
+    </div>
+    <label for="previewArea">Preview</label>
+    <div id="previewArea" class="py-1">
+      <div class="text-center m-3">
+        <svg width="64" height="64" viewBox="0 0 522.468 522.469">
+          <path
+            d="M325.762,70.513l-17.706-4.854c-2.279-0.76-4.524-0.521-6.707,0.715c-2.19,1.237-3.669,3.094-4.429,5.568L190.426,440.53    c-0.76,2.475-0.522,4.809,0.715,6.995c1.237,2.19,3.09,3.665,5.568,4.425l17.701,4.856c2.284,0.766,4.521,0.526,6.71-0.712    c2.19-1.243,3.666-3.094,4.425-5.564L332.042,81.936c0.759-2.474,0.523-4.808-0.716-6.999    C330.088,72.747,328.237,71.272,325.762,70.513z"
+            fill="#888888" />
+          <path
+            d="M166.167,142.465c0-2.474-0.953-4.665-2.856-6.567l-14.277-14.276c-1.903-1.903-4.093-2.857-6.567-2.857    s-4.665,0.955-6.567,2.857L2.856,254.666C0.95,256.569,0,258.759,0,261.233c0,2.474,0.953,4.664,2.856,6.566l133.043,133.044    c1.902,1.906,4.089,2.854,6.567,2.854s4.665-0.951,6.567-2.854l14.277-14.268c1.903-1.902,2.856-4.093,2.856-6.57    c0-2.471-0.953-4.661-2.856-6.563L51.107,261.233l112.204-112.201C165.217,147.13,166.167,144.939,166.167,142.465z"
+            fill="#888888" />
+          <path
+            d="M519.614,254.663L386.567,121.619c-1.902-1.902-4.093-2.857-6.563-2.857c-2.478,0-4.661,0.955-6.57,2.857l-14.271,14.275    c-1.902,1.903-2.851,4.09-2.851,6.567s0.948,4.665,2.851,6.567l112.206,112.204L359.163,373.442    c-1.902,1.902-2.851,4.093-2.851,6.563c0,2.478,0.948,4.668,2.851,6.57l14.271,14.268c1.909,1.906,4.093,2.854,6.57,2.854    c2.471,0,4.661-0.951,6.563-2.854L519.614,267.8c1.903-1.902,2.854-4.096,2.854-6.57    C522.468,258.755,521.517,256.565,519.614,254.663z"
+            fill="#888888" />
+        </svg>
+      </div>
+    </div>
+  </main>
+  <a target="_blank" href="https://github.com/yusanshi/embed_like_gist" class="github-corner"
+    aria-label="View source on GitHub">
+    <svg width="80" height="80" viewBox="0 0 250 250"
+      style="fill:#64CEAA; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+      <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+      <path
+        d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+        fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+      <path
+        d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+        fill="currentColor" class="octo-body"></path>
+    </svg>
+  </a>
+  <style>
+    .github-corner:hover .octo-arm {
+      animation: octocat-wave 560ms ease-in-out
+    }
+
+    @keyframes octocat-wave {
+
+      0%,
+      100% {
+        transform: rotate(0)
+      }
+
+      20%,
+      60% {
+        transform: rotate(-25deg)
+      }
+
+      40%,
+      80% {
+        transform: rotate(10deg)
+      }
+    }
+
+    @media (max-width:500px) {
+      .github-corner:hover .octo-arm {
+        animation: none
+      }
+
+      .github-corner .octo-arm {
+        animation: octocat-wave 560ms ease-in-out
+      }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/postscribe@2.0.8/dist/postscribe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/highlight.min.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js@2.7.0/dist/highlightjs-line-numbers.min.js"></script>
+  <script>
+    $(function () {
+      // Initialize popovers
+      $('[data-toggle="popover"]').popover();
+      $("#goForm").on("submit", function (e) {
+        e.preventDefault();
+        const target = $("#target").val();
+        const pattern = /^(https|http):\/\/github\.com(\/[A-Za-z0-9_\-\.]+){2}\/(tree|blob)\/[A-Za-z0-9_\-\.]+\//;
+        if (pattern.test(target)) {
+          $("#target").removeClass("is-invalid");
+          $("#target").addClass("is-valid");
+          const jsURL = `https://emgithub.com/embed.js?${$(this).serialize()}`;
+          const scriptTag = `<script src=\"${jsURL}\"><\/script>`;
+          $("#embededCode").val(scriptTag);
+          document.getElementById("previewArea").innerHTML = `<style>.lds-ring{margin:1rem auto;position:relative;width:60px;height:60px}.lds-ring div{box-sizing:border-box;display:block;position:absolute;width:48px;height:48px;margin:6px;border:6px solid #fff;border-radius:50%;animation:lds-ring 1.2s cubic-bezier(0.5,0,0.5,1) infinite;border-color:#888 transparent transparent transparent}.lds-ring div:nth-child(1){animation-delay:-.45s}.lds-ring div:nth-child(2){animation-delay:-.3s}.lds-ring div:nth-child(3){animation-delay:-.15s}@keyframes lds-ring{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>
+      <div><div class="lds-ring"><div></div><div></div><div></div><div></div></div></div>`;
+          postscribe("#previewArea", scriptTag, {
+            beforeWrite: function (str) {
+              document.getElementById("previewArea").innerHTML = "";
+              return str;
+            }
+          });
+        } else {
+          $("#target").removeClass("is-valid");
+          $("#target").addClass("is-invalid");
+        }
+      });
+
+
+      $("#copyButton").on("click", function (e) {
+        e.preventDefault();
+        copyTextToClipboard($("#embededCode").val());
+      });
+
+      if (["/", "/index.html", "/index.htm"].includes(window.location.pathname)) {
+        // Is entering the site directly
+        $("#target").attr("placeholder", "https://github.com/user/repository/blob/branch/src/hello.cpp");
+      } else {
+        // 404 triggered. Fill in target and simulate clicking
+        $("#target").val("https://github.com" + window.location.pathname);
+        $("#goForm").submit();
+      }
+
+    });
+
+    // https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
+    function copyTextToClipboard(text) {
+      if (!navigator.clipboard) {
+        fallbackCopyTextToClipboard(text);
+        return;
+      }
+      navigator.clipboard.writeText(text).then(function () {
+        console.log('Async: Copying to clipboard was successful!');
+      }, function (err) {
+        console.error('Async: Could not copy text: ', err);
+      });
+    }
+
+    function fallbackCopyTextToClipboard(text) {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.position = "fixed"; //avoid scrolling to bottom
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+      try {
+        const successful = document.execCommand('copy');
+        const msg = successful ? 'successful' : 'unsuccessful';
+        console.log('Fallback: Copying text command was ' + msg);
+      } catch (err) {
+        console.error('Fallback: Oops, unable to copy', err);
+      }
+      document.body.removeChild(textArea);
+    }
+  </script>
 </body>
 
 </html>

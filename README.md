@@ -35,4 +35,5 @@ PR is always welcomed.
 - [PostScribe](https://github.com/krux/postscribe) - Asynchronously write javascript;
 - Icons made by [Vectors Market](https://www.flaticon.com/authors/vectors-market) and [Dave Gandy](https://www.flaticon.com/authors/dave-gandy) from [www.flaticon.com](https://www.flaticon.com/);
 - Loading animation by [Loading.io](https://loading.io/);
-- CSS style based on [GitHub syntax theme generators](https://github.com/primer/github-syntax-theme-generator).
+- CSS style based on [GitHub syntax theme generators](https://github.com/primer/github-syntax-theme-generator);
+- [GitHub Corners](https://github.com/tholman/github-corners).
