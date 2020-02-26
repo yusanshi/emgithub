@@ -113,7 +113,7 @@ function loadScript(src) {
     });
 }
 
-function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, showFileMeta, isDarkStyle, fileURL, rawFileURL, extra_class) {
+function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, showFileMeta, isDarkStyle, fileURL, rawFileURL, extraClass) {
     const pre = document.createElement("pre");
     pre.style.margin = "0rem";
     const code = document.createElement("code");
@@ -130,8 +130,8 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
             code.style.border = "1px solid #555";
         }
     }
-    if (extra_class) {
-        code.classList.add(extra_class);
+    if (extraClass) {
+        code.classList.add(extraClass);
     }
     code.textContent = codeText;
     if (typeof hljs != "undefined" && typeof hljs.highlightBlock != "undefined") {

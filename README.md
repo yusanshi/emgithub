@@ -24,7 +24,6 @@ Supposed you want to embed this README file whose URL is `https://github.com/yus
 - [x] Show spinner while loading
 - [x] Add metadata
 - [x] Line count
-- [ ] Beautify transition
 - [ ] Different styles in one page
 
 PR is always welcomed.
