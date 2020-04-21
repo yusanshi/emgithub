@@ -71,12 +71,12 @@
           <option value="color-brewer">color-brewer</option>
           <option value="darcula">darcula</option>
           <option value="dark">dark</option>
-          <option value="default" selected>default</option>
+          <option value="default">default</option>
           <option value="docco">docco</option>
           <option value="dracula">dracula</option>
           <option value="far">far</option>
           <option value="foundation">foundation</option>
-          <option value="github">github</option>
+          <option value="github" selected>github</option>
           <option value="github-gist">github-gist</option>
           <option value="gml">gml</option>
           <option value="googlecode">googlecode</option>
@@ -225,8 +225,29 @@
     $(function () {
       // Initialize popovers
       $('[data-toggle="popover"]').popover();
+
+      // Load options from localStorage if possible
+      ['showBorder', 'showLineNumbers', 'showFileMeta'].forEach(e => {
+        const isShown = localStorage.getItem(e);
+        if (isShown !== null) {
+          document.getElementById(e).checked = (isShown === 'true');
+        }
+      });
+      const style = localStorage.getItem('style');
+      if (style !== null) {
+        document.getElementById('style').value = style;
+      }
+
       $("#goForm").on("submit", function (e) {
         e.preventDefault();
+
+        // Save current options using localStorage
+        ['showBorder', 'showLineNumbers', 'showFileMeta'].forEach(e => {
+          const newValue = document.getElementById(e).checked ? 'true' : 'false';
+          localStorage.setItem(e, newValue);
+        });
+        localStorage.setItem('style', document.getElementById('style').value);
+
         const target = $("#target").val();
         const pattern = /^(https|http):\/\/github\.com(\/[A-Za-z0-9_\-\.]+){2}\/(tree|blob)\/[A-Za-z0-9_\-\.]+\//;
         if (pattern.test(target)) {

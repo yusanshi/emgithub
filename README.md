@@ -22,6 +22,7 @@ Supposed you want to embed the file `https://github.com/pytorch/pytorch/blob/mas
 - [x] Show spinner while loading
 - [x] Add metadata
 - [x] Line count
+- [x] Remember options using localStorage
 - [ ] Different styles in one page
 
 PR is always welcomed.
