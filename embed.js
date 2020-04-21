@@ -116,10 +116,12 @@ function loadScript(src) {
 }
 
 function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, showFileMeta, isDarkStyle, fileURL, rawFileURL, extraClass) {
-  const pre = document.createElement("pre");
-  pre.style.margin = "0";
+  const fileContainer = document.createElement("div");
+  fileContainer.style.margin = "1em 0";
+
   const code = document.createElement("code");
   code.style.padding = "1rem";
+
   if (showFileMeta) {
     code.style.borderRadius = "0.3rem 0.3rem 0 0";
   } else {
@@ -142,33 +144,38 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
   if (typeof hljs != "undefined" && typeof hljs.lineNumbersBlock != "undefined" && showLineNumbers) {
     hljs.lineNumbersBlock(code);
   }
-  pre.appendChild(code);
-  const fileContainer = document.createElement("div");
-  const fileBody = document.createElement("div");
-  const fileMeta = document.createElement("div");
+
+  // Not use a real `pre` to avoid style being overwritten
+  // Simulation a real one by using its default style
+  const customPre = document.createElement("div");
+  customPre.style.display = "block";
+  customPre.style.fontFamily = "monospace";
+  customPre.style.whiteSpace = "pre"
+  customPre.appendChild(code);
+  fileContainer.appendChild(customPre);
+
   if (showFileMeta) {
+    const meta = document.createElement("div");
     const fileURLSplit = fileURL.split("/");
-    fileMeta.innerHTML = `<a target="_blank" href="${rawFileURL}" style="float:right">view raw</a>
+    meta.innerHTML = `<a target="_blank" href="${rawFileURL}" style="float:right">view raw</a>
 <a target="_blank" href="${fileURL}">${fileURLSplit[fileURLSplit.length - 1]}</a>
 delivered <span class="hide-in-phone">with ❤ </span>by <a target="_blank" href="https://emgithub.com">EmGithub</a>`;
-    fileMeta.classList.add("file-meta");
+    meta.classList.add("file-meta");
     if (!isDarkStyle) {
-      fileMeta.classList.add("file-meta-light");
+      meta.classList.add("file-meta-light");
       if (showBorder) {
-        fileMeta.style.border = "1px solid #ddd";
-        fileMeta.style.borderTop = "0";
+        meta.style.border = "1px solid #ddd";
+        meta.style.borderTop = "0";
       }
     } else {
-      fileMeta.classList.add("file-meta-dark");
+      meta.classList.add("file-meta-dark");
       if (showBorder) {
-        fileMeta.style.border = "1px solid #555";
-        fileMeta.style.borderTop = "0";
+        meta.style.border = "1px solid #555";
+        meta.style.borderTop = "0";
       }
     }
+    fileContainer.appendChild(meta);
   }
-  fileBody.appendChild(pre);
-  fileContainer.appendChild(fileBody);
-  fileContainer.appendChild(fileMeta);
   targetDiv.innerHTML = "";
   targetDiv.appendChild(fileContainer);
 }
