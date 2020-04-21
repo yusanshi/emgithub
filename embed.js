@@ -15,6 +15,7 @@ function embed() {
   const repository = pathSplit[2];
   const branch = pathSplit[4];
   const file = pathSplit.slice(5, pathSplit.length).join("/");
+  const fileExtension = file.split('.')[file.split('.').length - 1];
   const rawFileURL = `https://raw.githubusercontent.com/${user}/${repository}/${branch}/${file}`;
 
   // Reserving space for code area should be done in early time
@@ -90,7 +91,7 @@ function embed() {
     const allDiv = document.getElementsByClassName(className);
     for (let i = 0; i < allDiv.length; i++) {
       if (allDiv[i].getElementsByClassName("lds-ring").length) {
-        embedCodeToTarget(allDiv[i], result[0], showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL);
+        embedCodeToTarget(allDiv[i], result[0], showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL, fileExtension);
       }
     }
   }).catch((error) => {
@@ -115,7 +116,7 @@ function loadScript(src) {
   });
 }
 
-function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, showFileMeta, isDarkStyle, fileURL, rawFileURL, extraClass) {
+function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, showFileMeta, isDarkStyle, fileURL, rawFileURL, lang) {
   const fileContainer = document.createElement("div");
   fileContainer.style.margin = "1em 0";
 
@@ -134,9 +135,7 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
       code.style.border = "1px solid #555";
     }
   }
-  if (extraClass) {
-    code.classList.add(extraClass);
-  }
+  code.classList.add(lang);
   code.textContent = codeText;
   if (typeof hljs != "undefined" && typeof hljs.highlightBlock != "undefined") {
     hljs.highlightBlock(code);
@@ -146,7 +145,7 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
   }
 
   // Not use a real `pre` to avoid style being overwritten
-  // Simulation a real one by using its default style
+  // Simulate a real one by using its default style
   const customPre = document.createElement("div");
   customPre.style.display = "block";
   customPre.style.fontFamily = "monospace";
