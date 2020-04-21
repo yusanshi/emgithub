@@ -65,18 +65,20 @@ function embed() {
 </style>
 `);
 
-  // 1. Only try to load hljs or hljs-num when not loaded
-  // 2. hljs-num should be loaded only after hljs is loaded
   const HLJSURL = "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/highlight.min.js";
   const HLJSNumURL = "https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js@2.7.0/dist/highlightjs-line-numbers.min.js";
   const loadHLJS = (typeof hljs != "undefined" && typeof hljs.highlightBlock != "undefined") ?
     Promise.resolve() : loadScript(HLJSURL);
-  const loadJS = showLineNumbers ?
-    loadHLJS.then(function () {
-      return (typeof hljs != "undefined" && typeof hljs.lineNumbersBlock != "undefined") ?
+  let loadHLJSNum;
+  if (showLineNumbers) {
+    // hljs-num should be loaded only after hljs is loaded
+    loadHLJSNum = loadHLJS.then(() =>
+      (typeof hljs != "undefined" && typeof hljs.lineNumbersBlock != "undefined") ?
         Promise.resolve() : loadScript(HLJSNumURL)
-    }) : loadHLJS;
-  const fetchFile = fetch(rawFileURL).then(function (response) {
+    )
+  }
+
+  const fetchFile = fetch(rawFileURL).then((response) => {
     if (response.ok) {
       return response.text();
     } else {
@@ -84,14 +86,14 @@ function embed() {
     }
   });
 
-  Promise.all([loadJS, fetchFile]).then(function (result) {
+  Promise.all(showLineNumbers ? [fetchFile, loadHLJS, loadHLJSNum] : [fetchFile, loadHLJS]).then((result) => {
     const allDiv = document.getElementsByClassName(className);
     for (let i = 0; i < allDiv.length; i++) {
       if (allDiv[i].getElementsByClassName("lds-ring").length) {
-        embedCodeToTarget(allDiv[i], result[1], showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL);
+        embedCodeToTarget(allDiv[i], result[0], showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL);
       }
     }
-  }).catch(function (error) {
+  }).catch((error) => {
     const errorMsg = `Failed to process ${rawFileURL}
 ${error}`;
     const allDiv = document.getElementsByClassName(className);
@@ -104,7 +106,7 @@ ${error}`;
 }
 
 function loadScript(src) {
-  return new Promise(function (resolve, reject) {
+  return new Promise((resolve, reject) => {
     const script = document.createElement('script');
     script.src = src;
     script.onload = resolve;

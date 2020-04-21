@@ -167,7 +167,7 @@
       </div>
     </div>
   </main>
-  <a target="_blank" href="https://github.com/yusanshi/embed_like_gist" class="github-corner"
+  <a target="_blank" href="https://github.com/yusanshi/embed-like-gist" class="github-corner"
     aria-label="View source on GitHub">
     <svg width="80" height="80" viewBox="0 0 250 250"
       style="fill:#64CEAA; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
@@ -217,6 +217,7 @@
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/postscribe@2.0.8/dist/postscribe.min.js"></script>
+  <!-- In fact, the following is optional, here we make it to be loaded in advance -->
   <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/highlight.min.js"></script>
   <script
     src="https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js@2.7.0/dist/highlightjs-line-numbers.min.js"></script>
@@ -237,7 +238,7 @@
           document.getElementById("previewArea").innerHTML = `<style>.lds-ring{margin:1rem auto;position:relative;width:60px;height:60px}.lds-ring div{box-sizing:border-box;display:block;position:absolute;width:48px;height:48px;margin:6px;border:6px solid #fff;border-radius:50%;animation:lds-ring 1.2s cubic-bezier(0.5,0,0.5,1) infinite;border-color:#888 transparent transparent transparent}.lds-ring div:nth-child(1){animation-delay:-.45s}.lds-ring div:nth-child(2){animation-delay:-.3s}.lds-ring div:nth-child(3){animation-delay:-.15s}@keyframes lds-ring{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>
       <div><div class="lds-ring"><div></div><div></div><div></div><div></div></div></div>`;
           postscribe("#previewArea", scriptTag, {
-            beforeWrite: function (str) {
+            beforeWrite: (str) => {
               document.getElementById("previewArea").innerHTML = "";
               return str;
             }
@@ -249,7 +250,7 @@
       });
 
 
-      $("#copyButton").on("click", function (e) {
+      $("#copyButton").on("click", (e) => {
         e.preventDefault();
         copyTextToClipboard($("#embededCode").val());
       });
@@ -271,9 +272,9 @@
         fallbackCopyTextToClipboard(text);
         return;
       }
-      navigator.clipboard.writeText(text).then(function () {
+      navigator.clipboard.writeText(text).then(() => {
         console.log('Async: Copying to clipboard was successful!');
-      }, function (err) {
+      }, (err) => {
         console.error('Async: Could not copy text: ', err);
       });
     }
