@@ -34,6 +34,7 @@
     <form id="goForm" class="mb-4">
       <div class="input-group input-group-lg mb-3">
         <input type="text" name="target" id="target" class="form-control" required>
+        <div class="invalid-feedback mt-2 order-1">Invalid URL.</div>
         <select id="style" name="style" class="custom-select col-3 col-md-2">
           <option value="a11y-dark">a11y-dark</option>
           <option value="a11y-light">a11y-light</option>
@@ -126,7 +127,6 @@
         <div class="input-group-append">
           <button class="btn btn-lg btn-primary" type="submit">Go</button>
         </div>
-        <div class="invalid-feedback mt-2">Invalid URL.</div>
       </div>
       <div class="custom-control custom-checkbox custom-control-inline">
         <input type="checkbox" class="custom-control-input" name="showBorder" id="showBorder" checked>
