@@ -24,6 +24,7 @@ Supposed you want to embed the file `https://github.com/pytorch/pytorch/blob/mas
 - [x] Line count
 - [x] Remember options using localStorage
 - [ ] Different styles in one page
+- [ ] Code slice
 
 PR is always welcomed.
 
