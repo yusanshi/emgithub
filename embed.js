@@ -11,8 +11,8 @@ function embed() {
   const showLineNumbers = params.get("showLineNumbers") === "on";
   const showFileMeta = params.get("showFileMeta") === "on";
   const lineSplit = target.hash.split("-");
-  const startLine = lineSplit !== "" && lineSplit[0].replace("#L", "") || -1;
-  const endLine = lineSplit !== "" && lineSplit.length > 1 && lineSplit[1].replace("L", "") || -1;
+  const startLine = target.hash !== "" && lineSplit[0].replace("#L", "") || -1;
+  const endLine = target.hash !== "" && lineSplit.length > 1 && lineSplit[1].replace("L", "") || -1;
   const pathSplit = target.pathname.split("/");
   const user = pathSplit[1];
   const repository = pathSplit[2];
@@ -103,7 +103,7 @@ ${error}`;
     const allDiv = document.getElementsByClassName(className);
     for (let i = 0; i < allDiv.length; i++) {
       if (allDiv[i].getElementsByClassName("lds-ring").length) {
-        embedCodeToTarget(allDiv[i], errorMsg, showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL, 'plaintext', startLine, endLine);
+        embedCodeToTarget(allDiv[i], errorMsg, showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL, 'plaintext', -1, -1);
       }
     }
   });
@@ -167,9 +167,9 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
 
   if (showFileMeta) {
     const meta = document.createElement("div");
-    const fileURLSplit = fileURL.split("/");
+    const rawFileURLSplit = rawFileURL.split("/");
     meta.innerHTML = `<a target="_blank" href="${rawFileURL}" style="float:right">view raw</a>
-<a target="_blank" href="${fileURL}">${fileURLSplit[fileURLSplit.length - 1]}</a>
+<a target="_blank" href="${fileURL}">${rawFileURLSplit[rawFileURLSplit.length - 1]}</a>
 delivered <span class="hide-in-phone">with ❤ </span>by <a target="_blank" href="https://emgithub.com">EmGithub</a>`;
     meta.classList.add("file-meta");
     if (!isDarkStyle) {
