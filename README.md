@@ -13,6 +13,8 @@ There are two ways to use the service.
 
 Supposed you want to embed the file `https://github.com/pytorch/pytorch/blob/master/torch/nn/cpp.py`. The first way is to visit https://emgithub.com/ and paste the URL. The other is to simply add "em" before "github.com". For this `cpp.py` file, you edit URL into `https://emgithub.com/pytorch/pytorch/blob/master/torch/nn/cpp.py`, then press Enter.
 
+Permanent links to [a file](https://docs.github.com/en/github/managing-files-in-a-repository/getting-permanent-links-to-files) or [a code snippet](https://docs.github.com/en/github/managing-your-work-on-github/creating-a-permanent-link-to-a-code-snippet) are supported.
+
 ![](https://img.yusanshi.com/upload/20200301135039426771.gif)
 
 ## TODO
@@ -23,8 +25,9 @@ Supposed you want to embed the file `https://github.com/pytorch/pytorch/blob/mas
 - [x] Add metadata
 - [x] Line count
 - [x] Remember options using localStorage
+- [x] Code slice
 - [ ] Different styles in one page
-- [ ] Code slice
+
 
 PR is always welcomed.
 

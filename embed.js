@@ -10,6 +10,9 @@ function embed() {
   const showBorder = params.get("showBorder") === "on";
   const showLineNumbers = params.get("showLineNumbers") === "on";
   const showFileMeta = params.get("showFileMeta") === "on";
+  const lineSplit = target.hash.split("-");
+  const startLine = target.hash !== "" && lineSplit[0].replace("#L", "") || -1;
+  const endLine = target.hash !== "" && lineSplit.length > 1 && lineSplit[1].replace("L", "") || -1;
   const pathSplit = target.pathname.split("/");
   const user = pathSplit[1];
   const repository = pathSplit[2];
@@ -67,7 +70,7 @@ function embed() {
 `);
 
   const HLJSURL = "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/highlight.min.js";
-  const HLJSNumURL = "https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js@2.7.0/dist/highlightjs-line-numbers.min.js";
+  const HLJSNumURL = "https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js@2.8.0/dist/highlightjs-line-numbers.min.js";
   const loadHLJS = (typeof hljs != "undefined" && typeof hljs.highlightBlock != "undefined") ?
     Promise.resolve() : loadScript(HLJSURL);
   let loadHLJSNum;
@@ -91,7 +94,7 @@ function embed() {
     const allDiv = document.getElementsByClassName(className);
     for (let i = 0; i < allDiv.length; i++) {
       if (allDiv[i].getElementsByClassName("lds-ring").length) {
-        embedCodeToTarget(allDiv[i], result[0], showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL, fileExtension);
+        embedCodeToTarget(allDiv[i], result[0], showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL, fileExtension, startLine, endLine);
       }
     }
   }).catch((error) => {
@@ -100,7 +103,7 @@ ${error}`;
     const allDiv = document.getElementsByClassName(className);
     for (let i = 0; i < allDiv.length; i++) {
       if (allDiv[i].getElementsByClassName("lds-ring").length) {
-        embedCodeToTarget(allDiv[i], errorMsg, showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL, 'plaintext');
+        embedCodeToTarget(allDiv[i], errorMsg, showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL, 'plaintext', -1, -1);
       }
     }
   });
@@ -116,7 +119,7 @@ function loadScript(src) {
   });
 }
 
-function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, showFileMeta, isDarkStyle, fileURL, rawFileURL, lang) {
+function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, showFileMeta, isDarkStyle, fileURL, rawFileURL, lang, startLine, endLine) {
   const fileContainer = document.createElement("div");
   fileContainer.style.margin = "1em 0";
 
@@ -136,12 +139,23 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
     }
   }
   code.classList.add(lang);
-  code.textContent = codeText;
+  if (startLine > 0) {
+    codeTextSplit = codeText.split("\n");
+    if (endLine > 0) {
+      code.textContent = codeTextSplit.slice(startLine - 1, endLine).join("\n");
+    } else {
+      code.textContent = codeTextSplit.slice(startLine - 1).join("\n");
+    }
+  } else {
+    code.textContent = codeText;
+  }
   if (typeof hljs != "undefined" && typeof hljs.highlightBlock != "undefined") {
     hljs.highlightBlock(code);
   }
   if (typeof hljs != "undefined" && typeof hljs.lineNumbersBlock != "undefined" && showLineNumbers) {
-    hljs.lineNumbersBlock(code);
+    hljs.lineNumbersBlock(code, {
+      startFrom: startLine > 0 ? Number.parseInt(startLine) : 1
+    });
   }
 
   // Not use a real `pre` to avoid style being overwritten
@@ -153,9 +167,9 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
 
   if (showFileMeta) {
     const meta = document.createElement("div");
-    const fileURLSplit = fileURL.split("/");
+    const rawFileURLSplit = rawFileURL.split("/");
     meta.innerHTML = `<a target="_blank" href="${rawFileURL}" style="float:right">view raw</a>
-<a target="_blank" href="${fileURL}">${fileURLSplit[fileURLSplit.length - 1]}</a>
+<a target="_blank" href="${fileURL}">${rawFileURLSplit[rawFileURLSplit.length - 1]}</a>
 delivered <span class="hide-in-phone">with ❤ </span>by <a target="_blank" href="https://emgithub.com">EmGithub</a>`;
     meta.classList.add("file-meta");
     if (!isDarkStyle) {
