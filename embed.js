@@ -13,6 +13,7 @@ function embed() {
   const lineSplit = target.hash.split("-");
   const startLine = target.hash !== "" && lineSplit[0].replace("#L", "") || -1;
   const endLine = target.hash !== "" && lineSplit.length > 1 && lineSplit[1].replace("L", "") || -1;
+  const tabSize = target.searchParams.get("ts") || 8;
   const pathSplit = target.pathname.split("/");
   const user = pathSplit[1];
   const repository = pathSplit[2];
@@ -94,7 +95,7 @@ function embed() {
     const allDiv = document.getElementsByClassName(className);
     for (let i = 0; i < allDiv.length; i++) {
       if (allDiv[i].getElementsByClassName("lds-ring").length) {
-        embedCodeToTarget(allDiv[i], result[0], showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL, fileExtension, startLine, endLine);
+        embedCodeToTarget(allDiv[i], result[0], showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL, fileExtension, startLine, endLine, tabSize);
       }
     }
   }).catch((error) => {
@@ -103,7 +104,7 @@ ${error}`;
     const allDiv = document.getElementsByClassName(className);
     for (let i = 0; i < allDiv.length; i++) {
       if (allDiv[i].getElementsByClassName("lds-ring").length) {
-        embedCodeToTarget(allDiv[i], errorMsg, showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL, 'plaintext', -1, -1);
+        embedCodeToTarget(allDiv[i], errorMsg, showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL, 'plaintext', -1, -1, tabSize);
       }
     }
   });
@@ -119,7 +120,7 @@ function loadScript(src) {
   });
 }
 
-function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, showFileMeta, isDarkStyle, fileURL, rawFileURL, lang, startLine, endLine) {
+function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, showFileMeta, isDarkStyle, fileURL, rawFileURL, lang, startLine, endLine, tabSize) {
   const fileContainer = document.createElement("div");
   fileContainer.style.margin = "1em 0";
 
@@ -161,7 +162,8 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
   // Not use a real `pre` to avoid style being overwritten
   // Simulate a real one by using its default style
   const customPre = document.createElement("div");
-  customPre.style.whiteSpace = "pre"
+  customPre.style.whiteSpace = "pre";
+  customPre.style.tabSize = tabSize;
   customPre.appendChild(code);
   fileContainer.appendChild(customPre);
 
