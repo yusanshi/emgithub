@@ -285,7 +285,7 @@
         $("#target").attr("placeholder", "https://github.com/user/repository/blob/branch/src/hello.cpp#L2-L6");
       } else {
         // 404 triggered. Fill in target and simulate clicking
-        $("#target").val("https://github.com" + window.location.pathname);
+        $("#target").val("https://github.com" + window.location.pathname + window.location.search + window.location.hash);
         $("#goForm").submit();
       }
 
