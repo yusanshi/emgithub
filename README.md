@@ -15,6 +15,10 @@ Supposed you want to embed the file `https://github.com/pytorch/pytorch/blob/mas
 
 Permanent links to [a file](https://docs.github.com/en/github/managing-files-in-a-repository/getting-permanent-links-to-files) or [a code snippet](https://docs.github.com/en/github/managing-your-work-on-github/creating-a-permanent-link-to-a-code-snippet) are supported.
 
+**ProTip**
+- Use `#` to slice code, use `?ts=` to specify TAB width. An example using both of them: `?ts=2#L4-L12`.
+- The outermost div has a class attribute `emgithub-container`. Do any hacks you want.
+
 ![](https://img.yusanshi.com/upload/20200301135039426771.gif)
 
 ## TODO
