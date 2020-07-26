@@ -22,7 +22,7 @@ function embed() {
   const rawFileURL = `https://raw.githubusercontent.com/${user}/${repository}/${branch}/${file}`;
   // The id where code will be embeded. In order to support a single `target` embedded for multiple times,
   // we use a random string to avoid duplicated id.
-  const containerId = Math.random().toString(36).replace(/[^a-z]+/g, '');
+  const containerId = Math.random().toString(36).substring(2);
 
   // Reserving space for code area should be done in early time
   // or the div may not be found later
