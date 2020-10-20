@@ -11,7 +11,7 @@ function embed() {
   const showFileMeta = params.get("showFileMeta") === "on";
   const lineSplit = target.hash.split("-");
   const startLine = target.hash !== "" && lineSplit[0].replace("#L", "") || -1;
-  const endLine = target.hash !== "" && lineSplit.length > 1 && lineSplit[1].replace("L", "") || -1;
+  const endLine = target.hash !== "" && lineSplit.length > 1 && lineSplit[1].replace("L", "") || startLine;
   const tabSize = target.searchParams.get("ts") || 8;
   const pathSplit = target.pathname.split("/");
   const user = pathSplit[1];
@@ -136,11 +136,7 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
   code.classList.add(lang);
   if (startLine > 0) {
     codeTextSplit = codeText.split("\n");
-    if (endLine > 0) {
-      code.textContent = codeTextSplit.slice(startLine - 1, endLine).join("\n");
-    } else {
-      code.textContent = codeTextSplit.slice(startLine - 1).join("\n");
-    }
+    code.textContent = codeTextSplit.slice(startLine - 1, endLine).join("\n");
   } else {
     code.textContent = codeText;
   }
@@ -149,6 +145,7 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
   }
   if (typeof hljs != "undefined" && typeof hljs.lineNumbersBlock != "undefined" && showLineNumbers) {
     hljs.lineNumbersBlock(code, {
+      singleLine: true,
       startFrom: startLine > 0 ? Number.parseInt(startLine) : 1
     });
   }
