@@ -70,6 +70,47 @@ function embed() {
     display: none;
   }
 }
+.emgithub-container {
+  position: relative;
+}
+
+/* TODO: be sure to handle dark/light themes */
+.emgithub-toolbar {
+  position: absolute;
+  height: 40px;
+  width: 64px;
+  right: 0px;
+  padding: 5px;
+}
+
+.emgithub-copy-btn {
+  display: none;
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 6px;
+  color: #586069;
+  background-color: #f7f7f7;
+}
+
+.emgithub-container:hover .emgithub-copy-btn {
+  display: block;
+}
+
+.emgithub-container:hover .emgithub-copy-btn.dark-copy-btn {
+  color: #f7f7f7;
+  background-color: #586069;
+}
+
+.emgithub-container .emgithub-copy-btn:hover {
+  color: #f7f7f7;
+  background-color: #586069;
+}
+
+.emgithub-container .emgithub-copy-btn.dark-copy-btn:hover {
+  color: #586069;
+  background-color: #f7f7f7;
+}
+
 </style>
 `);
 
@@ -155,10 +196,17 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
   const toolbar = document.createElement('div');
   toolbar.classList.add('emgithub-toolbar');
   if(showCopy) {
-    const copyButton = document.createElement('button');
+    const copyButton = document.createElement('a');
+    copyButton.classList.add('emgithub-copy-btn');
+    if(isDarkStyle) {
+      copyButton.classList.add('dark-copy-btn');
+    }
     copyButton.setAttribute('data-clipboard-target', `#${targetDivID} .emgithub-code`)
+    copyButton.href = 'javascript:void(0);'
     copyButton.innerHTML = 'Copy';
-    fileContainer.appendChild(copyButton);
+    
+    toolbar.appendChild(copyButton);
+    
     let clipboard = new ClipboardJS(copyButton);
     clipboard.on('success', function(e) {    
         e.clearSelection();
