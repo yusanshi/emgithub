@@ -74,7 +74,6 @@ function embed() {
   position: relative;
 }
 
-/* TODO: be sure to handle dark/light themes */
 .emgithub-toolbar {
   position: absolute;
   height: 40px;
