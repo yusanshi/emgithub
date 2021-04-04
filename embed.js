@@ -10,7 +10,6 @@ function embed() {
   const showLineNumbers = params.get("showLineNumbers") === "on";
   const showFileMeta = params.get("showFileMeta") === "on";
   const showCopy = params.get("showCopy") === "on";
-  const showShare = params.get("showShare") === "on";
   const lineSplit = target.hash.split("-");
   const startLine = target.hash !== "" && lineSplit[0].replace("#L", "") || -1;
   const endLine = target.hash !== "" && lineSplit.length > 1 && lineSplit[1].replace("L", "") || startLine;
@@ -97,12 +96,12 @@ function embed() {
 
   Promise.all(showLineNumbers ? [fetchFile, loadHLJS, loadHLJSNum] : [fetchFile, loadHLJS]).then((result) => {
     const targetDiv = document.getElementById(containerId);
-    embedCodeToTarget(targetDiv, result[0], showBorder, showLineNumbers, showFileMeta, showCopy, showShare, isDarkStyle, target.href, rawFileURL, fileExtension, startLine, endLine, tabSize);
+    embedCodeToTarget(targetDiv, result[0], showBorder, showLineNumbers, showFileMeta, showCopy, isDarkStyle, target.href, rawFileURL, fileExtension, startLine, endLine, tabSize);
   }).catch((error) => {
     const errorMsg = `Failed to process ${rawFileURL}
 ${error}`;
     const targetDiv = document.getElementById(containerId);
-    embedCodeToTarget(targetDiv, errorMsg, showBorder, showLineNumbers, showFileMeta, showCopy, showShare, isDarkStyle, target.href, rawFileURL, 'plaintext', -1, -1, tabSize);
+    embedCodeToTarget(targetDiv, errorMsg, showBorder, showLineNumbers, showFileMeta, showCopy, isDarkStyle, target.href, rawFileURL, 'plaintext', -1, -1, tabSize);
   });
 }
 
@@ -116,7 +115,8 @@ function loadScript(src) {
   });
 }
 
-function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, showFileMeta, showCopy, showShare, isDarkStyle, fileURL, rawFileURL, lang, startLine, endLine, tabSize) {
+function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, showFileMeta, showCopy, isDarkStyle, fileURL, rawFileURL, lang, startLine, endLine, tabSize) {
+  const targetDivID = targetDiv.getAttribute('id');
   const fileContainer = document.createElement("div");
   fileContainer.style.margin = "1em 0";
 
@@ -156,22 +156,21 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
   toolbar.classList.add('emgithub-toolbar');
   if(showCopy) {
     const copyButton = document.createElement('button');
+    copyButton.setAttribute('data-clipboard-target', `#${targetDivID} .emgithub-code`)
     copyButton.innerHTML = 'Copy';
     fileContainer.appendChild(copyButton);
-  }
-  if(showShare) {
-    const shareButton = document.createElement('button');
-    shareButton.innerHTML = 'Share';
-    fileContainer.appendChild(shareButton);
-  }
+    let clipboard = new ClipboardJS(copyButton);
+    clipboard.on('success', function(e) {    
+        e.clearSelection();
+    });
 
-  if(showCopy || showShare) {
     fileContainer.appendChild(toolbar);
   }
 
   // Not use a real `pre` to avoid style being overwritten
   // Simulate a real one by using its default style
   const customPre = document.createElement("div");
+  customPre.classList.add('emgithub-code');
   customPre.style.whiteSpace = "pre";
   customPre.style.tabSize = tabSize;
   customPre.appendChild(code);
