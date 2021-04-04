@@ -208,7 +208,7 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
     
     let clipboard = new ClipboardJS(copyButton);
     clipboard.on('success', function(e) {    
-        e.clearSelection();
+      e.clearSelection();
     });
 
     fileContainer.appendChild(toolbar);
