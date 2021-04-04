@@ -251,7 +251,7 @@
         e.preventDefault();
 
         // Save current options using localStorage
-        ['showBorder', 'showLineNumbers', 'showFileMeta'].forEach(e => {
+        ['showBorder', 'showLineNumbers', 'showFileMeta', 'showCopy'].forEach(e => {
           const newValue = document.getElementById(e).checked ? 'true' : 'false';
           localStorage.setItem(e, newValue);
         });
