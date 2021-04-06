@@ -202,6 +202,18 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
     }
     copyButton.href = 'javascript:void(0);'
     copyButton.innerHTML = 'Copy';
+    copyButton.addEventListener('click', function(event){
+      const copyButton = event.target;
+      let currentParent = copyButton.parentElement;
+      while(!currentParent.classList.contains("emgithub-container")) {
+        currentParent = currentParent.parentElement;
+      }
+      const codeElement = currentParent.querySelector('.emgithub-code');
+      const text = codeElement.innerText;
+
+      // NOTE: text has extra whitespace as DOM elements are stripped. Can we clean that up?
+      copyTextToClipboard(text);
+    });
     
     toolbar.appendChild(copyButton);
     fileContainer.appendChild(toolbar);
