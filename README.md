@@ -66,7 +66,7 @@ You can modify the code and test it by launching an HTTP server in the project d
      </head>
      <body style="padding:5rem">
        <h1>JavaScript, All options on</h1>
-       <script src="http://localhost:8086/embed.js?target=https%3A%2F%2Fgithub.com%2Fhighlightjs%2Fhighlight.js%2Fblob%2Fmaster%2Fsrc%2Fstyles%2Fdarcula.css&style=github&showBorder=on&showLineNumbers=on&showFileMeta=on"></script>
+       <script src="http://localhost:8086/embed.js?target=https%3A%2F%2Fgithub.com%2Fyusanshi%2Fembed-like-gist%2Fblob%2Fmaster%2Fembed.js&style=github&showBorder=on&showLineNumbers=on&showFileMeta=on"></script>
        <br />
        <h1>Plain text, All options off</h1>
        <script src="http://localhost:8086/embed.js?target=https%3A%2F%2Fgithub.com%2Fyusanshi%2Fembed-like-gist%2Fblob%2Fmaster%2FLICENSE&style=github"></script>
