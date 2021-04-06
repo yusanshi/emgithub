@@ -116,8 +116,8 @@ function loadScript(src) {
 }
 
 function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, showFileMeta, isDarkStyle, fileURL, rawFileURL, lang, startLine, endLine, tabSize, serviceProvider) {
-  const fileContainer = document.createElement("div");
-  fileContainer.style.margin = "1em 0";
+  targetDiv.innerHTML = "";
+  targetDiv.style.margin = "1em 0";
 
   const code = document.createElement("code");
   code.style.padding = "1rem";
@@ -157,7 +157,7 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
   customPre.style.whiteSpace = "pre";
   customPre.style.tabSize = tabSize;
   customPre.appendChild(code);
-  fileContainer.appendChild(customPre);
+  targetDiv.appendChild(customPre);
 
   if (showFileMeta) {
     const meta = document.createElement("div");
@@ -179,8 +179,6 @@ delivered <span class="hide-in-phone">with ❤ </span>by <a target="_blank" href
         meta.style.borderTop = "0";
       }
     }
-    fileContainer.appendChild(meta);
+    targetDiv.appendChild(meta);
   }
-  targetDiv.innerHTML = "";
-  targetDiv.appendChild(fileContainer);
 }
