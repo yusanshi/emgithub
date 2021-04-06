@@ -52,7 +52,7 @@ You can modify the code and test it by launching an HTTP server in the project d
 
 3. To test the 404 page, visit <http://localhost:8086/404.html>.
 
-   > Don't be confused by the "404". It is how the "adding em in address bar" works: after adding the "em", the HTTP server (provided by GitHub Pages) can't find the file so it render `404.html`.
+   > Don't be confused by the "404". It is how the "adding em in address bar" works: after adding the "em", the HTTP server (provided by GitHub Pages) can't find the file so it renders `404.html`.
 
 4. To test the real performance when the code is embedded, create a simple HTML file `test.html` in the project root directory like this:
 
