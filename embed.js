@@ -200,17 +200,10 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
     if(isDarkStyle) {
       copyButton.classList.add('dark-copy-btn');
     }
-    copyButton.setAttribute('data-clipboard-target', `#${targetDivID} .emgithub-code`)
     copyButton.href = 'javascript:void(0);'
     copyButton.innerHTML = 'Copy';
     
     toolbar.appendChild(copyButton);
-    
-    let clipboard = new ClipboardJS(copyButton);
-    clipboard.on('success', function(e) {    
-      e.clearSelection();
-    });
-
     fileContainer.appendChild(toolbar);
   }
 
