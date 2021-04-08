@@ -89,6 +89,9 @@ function embed() {
   padding: 6px;
   color: #586069;
   background-color: #f7f7f7;
+  font-weight: bold;
+  text-decoration: none;
+  text-align: center;
 }
 
 .emgithub-container:hover .emgithub-copy-btn {
@@ -108,6 +111,10 @@ function embed() {
 .emgithub-container .emgithub-copy-btn.dark-copy-btn:hover {
   color: #586069;
   background-color: #f7f7f7;
+}
+
+.emgithub-container .emgithub-copy-btn:active {
+  background-color: #39a916;
 }
 
 </style>
