@@ -185,10 +185,9 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
   code.classList.add(lang);
   if (startLine > 0) {
     codeTextSplit = codeText.split("\n");
-    code.textContent = codeTextSplit.slice(startLine - 1, endLine).join("\n");
-  } else {
-    code.textContent = codeText;
+    codeText = codeTextSplit.slice(startLine - 1, endLine).join("\n");
   }
+  code.textContent = codeText;
   if (typeof hljs != "undefined" && typeof hljs.highlightBlock != "undefined") {
     hljs.highlightBlock(code);
   }
