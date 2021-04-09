@@ -163,7 +163,6 @@ function loadScript(src) {
 }
 
 function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, showFileMeta, showCopy, isDarkStyle, fileURL, rawFileURL, lang, startLine, endLine, tabSize) {
-  const targetDivID = targetDiv.getAttribute('id');
   const fileContainer = document.createElement("div");
   fileContainer.style.margin = "1em 0";
 
