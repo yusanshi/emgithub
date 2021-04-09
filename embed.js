@@ -220,7 +220,6 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
   // Not use a real `pre` to avoid style being overwritten
   // Simulate a real one by using its default style
   const customPre = document.createElement("div");
-  customPre.classList.add('emgithub-code');
   customPre.style.whiteSpace = "pre";
   customPre.style.tabSize = tabSize;
   customPre.appendChild(code);
