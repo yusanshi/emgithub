@@ -33,90 +33,96 @@ function embed() {
 <style>.hljs-ln-numbers{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;text-align:right;color:#ccc;vertical-align:top}.hljs-ln td.hljs-ln-numbers{padding-right:1.25rem}</style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/styles/${style}.min.css">
 <style>
-.file-meta {
+.emgithub-container .file-meta {
   padding: 0.75rem;
   border-radius: 0 0 0.3rem 0.3rem;
   font: 12px -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,
   sans-serif, Apple Color Emoji, Segoe UI Emoji;
 }
 
-.file-meta-light {
+.emgithub-container .file-meta-light {
   color: #586069;
   background-color: #f7f7f7;
 }
 
-.file-meta-dark {
+.emgithub-container .file-meta-dark {
   color: #f7f7f7;
   background-color: #586069;
 }
 
-.file-meta a {
+.emgithub-container .file-meta a {
   font-weight: 600;
   text-decoration: none;
   border: 0;
 }
 
-.file-meta-light a {
+.emgithub-container .file-meta-light a {
   color: #666;
 }
 
-.file-meta-dark a {
+.emgithub-container .file-meta-dark a {
   color: #fff;
 }
 
 /* hide content for small device */
 @media (max-width: 575.98px) {
-  .hide-in-phone {
+  .emgithub-container .hide-in-phone {
     display: none;
   }
 }
+
 .emgithub-container {
   position: relative;
 }
 
-.emgithub-toolbar {
+.emgithub-container .toolbar {
   position: absolute;
-  height: 40px;
-  width: 64px;
   right: 0px;
-  padding: 5px;
+  padding: 0.3rem;
 }
 
-.emgithub-copy-btn {
+.emgithub-container .copy-btn {
   display: none;
   border: 1px solid black;
   border-radius: 3px;
-  padding: 6px;
-  color: #586069;
-  background-color: #f7f7f7;
-  font-weight: bold;
+  padding: 0.4rem;
+  font: bold 1em monospace;
   text-decoration: none;
-  text-align: center;
 }
 
-.emgithub-container:hover .emgithub-copy-btn {
+.emgithub-container .copy-btn-light {
+  color: #586069;
+  background-color: #f7f7f7;
+}
+
+.emgithub-container .copy-btn-dark {
+  color: #f7f7f7;
+  background-color: #586069;
+}
+
+.emgithub-container:hover .copy-btn {
   display: block;
 }
 
-.emgithub-container:hover .emgithub-copy-btn.dark-copy-btn {
+.emgithub-container .copy-btn-light:hover {
   color: #f7f7f7;
   background-color: #586069;
 }
 
-.emgithub-container .emgithub-copy-btn:hover {
-  color: #f7f7f7;
-  background-color: #586069;
-}
-
-.emgithub-container .emgithub-copy-btn.dark-copy-btn:hover {
+.emgithub-container .copy-btn-dark:hover {
   color: #586069;
   background-color: #f7f7f7;
 }
 
-.emgithub-container .emgithub-copy-btn:active {
-  background-color: #39a916;
+.emgithub-container .copy-btn-light:active {
+  /* darken #586069 by 20% https://www.cssfontstack.com/oldsites/hexcolortool/ */
+  background-color: #252d36;
 }
 
+.emgithub-container .copy-btn-dark:active {
+  /* darken #f7f7f7 by 20% */
+  background-color: #c4c4c4;
+}
 </style>
 `);
 
@@ -198,12 +204,14 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
   }
 
   const toolbar = document.createElement('div');
-  toolbar.classList.add('emgithub-toolbar');
+  toolbar.classList.add('toolbar');
   if(showCopy) {
     const copyButton = document.createElement('a');
-    copyButton.classList.add('emgithub-copy-btn');
+    copyButton.classList.add('copy-btn');
     if(isDarkStyle) {
-      copyButton.classList.add('dark-copy-btn');
+      copyButton.classList.add('copy-btn-dark');
+    } else {
+      copyButton.classList.add('copy-btn-light');
     }
     copyButton.href = 'javascript:void(0);'
     copyButton.innerHTML = 'Copy';
