@@ -235,7 +235,7 @@
       $('[data-toggle="popover"]').popover();
 
       // Load options from localStorage if possible
-      ['showBorder', 'showLineNumbers', 'showFileMeta'].forEach(e => {
+      ['showBorder', 'showLineNumbers', 'showFileMeta', 'showCopy'].forEach(e => {
         const isShown = localStorage.getItem(e);
         if (isShown !== null) {
           document.getElementById(e).checked = (isShown === 'true');
