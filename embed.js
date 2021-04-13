@@ -10,6 +10,7 @@ function embed() {
   const showBorder = params.get("showBorder") === "on";
   const showLineNumbers = params.get("showLineNumbers") === "on";
   const showFileMeta = params.get("showFileMeta") === "on";
+  const showCopy = params.get("showCopy") === "on";
   const lineSplit = target.hash.split("-");
   const startLine = target.hash !== "" && lineSplit[0].replace("#L", "") || -1;
   const endLine = target.hash !== "" && lineSplit.length > 1 && lineSplit[1].replace("L", "") || startLine;
@@ -33,42 +34,95 @@ function embed() {
 <style>.hljs-ln-numbers{-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;text-align:right;color:#ccc;vertical-align:top}.hljs-ln td.hljs-ln-numbers{padding-right:1.25rem}</style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/styles/${style}.min.css">
 <style>
-.file-meta {
+.emgithub-container .file-meta {
   padding: 0.75rem;
   border-radius: 0 0 0.3rem 0.3rem;
   font: 12px -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial,
   sans-serif, Apple Color Emoji, Segoe UI Emoji;
 }
 
-.file-meta-light {
+.emgithub-container .file-meta-light {
   color: #586069;
   background-color: #f7f7f7;
 }
 
-.file-meta-dark {
+.emgithub-container .file-meta-dark {
   color: #f7f7f7;
   background-color: #586069;
 }
 
-.file-meta a {
+.emgithub-container .file-meta a {
   font-weight: 600;
   text-decoration: none;
   border: 0;
 }
 
-.file-meta-light a {
+.emgithub-container .file-meta-light a {
   color: #666;
 }
 
-.file-meta-dark a {
+.emgithub-container .file-meta-dark a {
   color: #fff;
 }
 
 /* hide content for small device */
 @media (max-width: 575.98px) {
-  .hide-in-phone {
+  .emgithub-container .hide-in-phone {
     display: none;
   }
+}
+
+.emgithub-container {
+  position: relative;
+}
+
+.emgithub-container .toolbar {
+  position: absolute;
+  right: 0px;
+  padding: 0.3rem;
+}
+
+.emgithub-container .copy-btn {
+  display: none;
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 0.4rem;
+  font: bold 1em monospace;
+  text-decoration: none;
+}
+
+.emgithub-container .copy-btn-light {
+  color: #586069;
+  background-color: #f7f7f7;
+}
+
+.emgithub-container .copy-btn-dark {
+  color: #f7f7f7;
+  background-color: #586069;
+}
+
+.emgithub-container:hover .copy-btn {
+  display: block;
+}
+
+.emgithub-container .copy-btn-light:hover {
+  color: #f7f7f7;
+  background-color: #586069;
+}
+
+.emgithub-container .copy-btn-dark:hover {
+  color: #586069;
+  background-color: #f7f7f7;
+}
+
+.emgithub-container .copy-btn-light:active {
+  /* darken #586069 by 20% https://www.cssfontstack.com/oldsites/hexcolortool/ */
+  background-color: #252d36;
+}
+
+.emgithub-container .copy-btn-dark:active {
+  /* darken #f7f7f7 by 20% */
+  background-color: #c4c4c4;
 }
 </style>
 `);
@@ -96,12 +150,12 @@ function embed() {
 
   Promise.all(showLineNumbers ? [fetchFile, loadHLJS, loadHLJSNum] : [fetchFile, loadHLJS]).then((result) => {
     const targetDiv = document.getElementById(containerId);
-    embedCodeToTarget(targetDiv, result[0], showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL, fileExtension, startLine, endLine, tabSize, sourceURL.origin);
+    embedCodeToTarget(targetDiv, result[0], showBorder, showLineNumbers, showFileMeta, showCopy, isDarkStyle, target.href, rawFileURL, fileExtension, startLine, endLine, tabSize, sourceURL.origin);
   }).catch((error) => {
     const errorMsg = `Failed to process ${rawFileURL}
 ${error}`;
     const targetDiv = document.getElementById(containerId);
-    embedCodeToTarget(targetDiv, errorMsg, showBorder, showLineNumbers, showFileMeta, isDarkStyle, target.href, rawFileURL, 'plaintext', -1, -1, tabSize, sourceURL.origin);
+    embedCodeToTarget(targetDiv, errorMsg, showBorder, showLineNumbers, showFileMeta, showCopy, isDarkStyle, target.href, rawFileURL, 'plaintext', -1, -1, tabSize, sourceURL.origin);
   });
 }
 
@@ -115,7 +169,8 @@ function loadScript(src) {
   });
 }
 
-function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, showFileMeta, isDarkStyle, fileURL, rawFileURL, lang, startLine, endLine, tabSize, serviceProvider) {
+
+function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, showFileMeta, showCopy, isDarkStyle, fileURL, rawFileURL, lang, startLine, endLine, tabSize, serviceProvider) {
   targetDiv.innerHTML = "";
   targetDiv.style.margin = "1em 0";
 
@@ -137,10 +192,9 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
   code.classList.add(lang);
   if (startLine > 0) {
     codeTextSplit = codeText.split("\n");
-    code.textContent = codeTextSplit.slice(startLine - 1, endLine).join("\n");
-  } else {
-    code.textContent = codeText;
+    codeText = codeTextSplit.slice(startLine - 1, endLine).join("\n");
   }
+  code.textContent = codeText;
   if (typeof hljs != "undefined" && typeof hljs.highlightBlock != "undefined") {
     hljs.highlightBlock(code);
   }
@@ -149,6 +203,29 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
       singleLine: true,
       startFrom: startLine > 0 ? Number.parseInt(startLine) : 1
     });
+  }
+
+  if(showCopy) {
+    const toolbar = document.createElement('div');
+    toolbar.classList.add('toolbar');
+
+    const copyButton = document.createElement('a');
+    copyButton.classList.add('copy-btn');
+    if(isDarkStyle) {
+      copyButton.classList.add('copy-btn-dark');
+    } else {
+      copyButton.classList.add('copy-btn-light');
+    }
+    copyButton.href = 'javascript:void(0);'
+    copyButton.innerHTML = 'Copy';
+    copyButton.addEventListener('click', function(e){
+      e.preventDefault();
+      e.cancelBubble = true;
+      copyTextToClipboard(codeText);
+    });
+
+    toolbar.appendChild(copyButton);
+    targetDiv.appendChild(toolbar);
   }
 
   // Not use a real `pre` to avoid style being overwritten
@@ -181,4 +258,29 @@ delivered <span class="hide-in-phone">with ❤ </span>by <a target="_blank" href
     }
     targetDiv.appendChild(meta);
   }
+}
+
+// https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
+function copyTextToClipboard(text) {
+  if (!navigator.clipboard) {
+    fallbackCopyTextToClipboard(text);
+    return;
+  }
+  navigator.clipboard.writeText(text)
+}
+
+function fallbackCopyTextToClipboard(text) {
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+  textArea.style.position = "fixed"; //avoid scrolling to bottom
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  try {
+    document.execCommand('copy');
+  } catch (err) {
+    console.error('fallbackCopyTextToClipboard: Oops, unable to copy', err);
+  }
+  document.body.removeChild(textArea);
 }

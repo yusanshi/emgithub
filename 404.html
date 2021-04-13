@@ -144,6 +144,10 @@
         <input type="checkbox" class="custom-control-input" name="showFileMeta" id="showFileMeta" checked>
         <label class="custom-control-label" for="showFileMeta">File metadata</label>
       </div>
+      <div class="custom-control custom-checkbox custom-control-inline">
+        <input type="checkbox" class="custom-control-input" name="showCopy" id="showCopy" checked>
+        <label class="custom-control-label" for="showCopy">Copy button</label>
+      </div>
     </form>
     <label for="embededCode">Code to embed</label>
     <div class="input-group input-group-lg mb-3">
@@ -231,7 +235,7 @@
       $('[data-toggle="popover"]').popover();
 
       // Load options from localStorage if possible
-      ['showBorder', 'showLineNumbers', 'showFileMeta'].forEach(e => {
+      ['showBorder', 'showLineNumbers', 'showFileMeta', 'showCopy'].forEach(e => {
         const isShown = localStorage.getItem(e);
         if (isShown !== null) {
           document.getElementById(e).checked = (isShown === 'true');
@@ -246,7 +250,7 @@
         e.preventDefault();
 
         // Save current options using localStorage
-        ['showBorder', 'showLineNumbers', 'showFileMeta'].forEach(e => {
+        ['showBorder', 'showLineNumbers', 'showFileMeta', 'showCopy'].forEach(e => {
           const newValue = document.getElementById(e).checked ? 'true' : 'false';
           localStorage.setItem(e, newValue);
         });
