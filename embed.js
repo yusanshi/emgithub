@@ -1,7 +1,8 @@
 embed();
 
 function embed() {
-  const params = (new URL(document.currentScript.src)).searchParams;
+  const sourceURL = new URL(document.currentScript.src);
+  const params = sourceURL.searchParams;
   const target = new URL(params.get("target"));
   const style = params.get("style");
   const trickyDarkStyle = ["an-old-hope", "androidstudio", "arta", "codepen-embed", "darcula", "dracula", "far", "gml", "hopscotch", "hybrid", "monokai", "monokai-sublime", "nord", "obsidian", "ocean", "railscasts", "rainbow", "shades-of-purple", "sunburst", "vs2015", "xt256", "zenburn"]; // dark styles without 'dark', 'black' or 'night' in its name
@@ -19,7 +20,7 @@ function embed() {
   const repository = pathSplit[2];
   const branch = pathSplit[4];
   const file = pathSplit.slice(5, pathSplit.length).join("/");
-  const fileExtension = file.split('.')[file.split('.').length - 1];
+  const fileExtension = file.split('.').length > 1 ? file.split('.')[file.split('.').length - 1] : 'txt';
   const rawFileURL = `https://raw.githubusercontent.com/${user}/${repository}/${branch}/${file}`;
   // The id where code will be embeded. In order to support a single `target` embedded for multiple times,
   // we use a random string to avoid duplicated id.
@@ -149,12 +150,12 @@ function embed() {
 
   Promise.all(showLineNumbers ? [fetchFile, loadHLJS, loadHLJSNum] : [fetchFile, loadHLJS]).then((result) => {
     const targetDiv = document.getElementById(containerId);
-    embedCodeToTarget(targetDiv, result[0], showBorder, showLineNumbers, showFileMeta, showCopy, isDarkStyle, target.href, rawFileURL, fileExtension, startLine, endLine, tabSize);
+    embedCodeToTarget(targetDiv, result[0], showBorder, showLineNumbers, showFileMeta, showCopy, isDarkStyle, target.href, rawFileURL, fileExtension, startLine, endLine, tabSize, sourceURL.origin);
   }).catch((error) => {
     const errorMsg = `Failed to process ${rawFileURL}
 ${error}`;
     const targetDiv = document.getElementById(containerId);
-    embedCodeToTarget(targetDiv, errorMsg, showBorder, showLineNumbers, showFileMeta, showCopy, isDarkStyle, target.href, rawFileURL, 'plaintext', -1, -1, tabSize);
+    embedCodeToTarget(targetDiv, errorMsg, showBorder, showLineNumbers, showFileMeta, showCopy, isDarkStyle, target.href, rawFileURL, 'plaintext', -1, -1, tabSize, sourceURL.origin);
   });
 }
 
@@ -168,9 +169,10 @@ function loadScript(src) {
   });
 }
 
-function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, showFileMeta, showCopy, isDarkStyle, fileURL, rawFileURL, lang, startLine, endLine, tabSize) {
-  const fileContainer = document.createElement("div");
-  fileContainer.style.margin = "1em 0";
+
+function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, showFileMeta, showCopy, isDarkStyle, fileURL, rawFileURL, lang, startLine, endLine, tabSize, serviceProvider) {
+  targetDiv.innerHTML = "";
+  targetDiv.style.margin = "1em 0";
 
   const code = document.createElement("code");
   code.style.padding = "1rem";
@@ -203,9 +205,10 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
     });
   }
 
-  const toolbar = document.createElement('div');
-  toolbar.classList.add('toolbar');
   if(showCopy) {
+    const toolbar = document.createElement('div');
+    toolbar.classList.add('toolbar');
+    
     const copyButton = document.createElement('a');
     copyButton.classList.add('copy-btn');
     if(isDarkStyle) {
@@ -222,7 +225,7 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
     });
     
     toolbar.appendChild(copyButton);
-    fileContainer.appendChild(toolbar);
+    targetDiv.appendChild(toolbar);
   }
 
   // Not use a real `pre` to avoid style being overwritten
@@ -231,14 +234,14 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
   customPre.style.whiteSpace = "pre";
   customPre.style.tabSize = tabSize;
   customPre.appendChild(code);
-  fileContainer.appendChild(customPre);
+  targetDiv.appendChild(customPre);
 
   if (showFileMeta) {
     const meta = document.createElement("div");
     const rawFileURLSplit = rawFileURL.split("/");
     meta.innerHTML = `<a target="_blank" href="${rawFileURL}" style="float:right">view raw</a>
 <a target="_blank" href="${fileURL}">${rawFileURLSplit[rawFileURLSplit.length - 1]}</a>
-delivered <span class="hide-in-phone">with ❤ </span>by <a target="_blank" href="https://emgithub.com">EmGithub</a>`;
+delivered <span class="hide-in-phone">with ❤ </span>by <a target="_blank" href="${serviceProvider}">EmGithub</a>`;
     meta.classList.add("file-meta");
     if (!isDarkStyle) {
       meta.classList.add("file-meta-light");
@@ -253,10 +256,8 @@ delivered <span class="hide-in-phone">with ❤ </span>by <a target="_blank" href
         meta.style.borderTop = "0";
       }
     }
-    fileContainer.appendChild(meta);
+    targetDiv.appendChild(meta);
   }
-  targetDiv.innerHTML = "";
-  targetDiv.appendChild(fileContainer);
 }
 
 // https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
