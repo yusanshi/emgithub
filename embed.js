@@ -208,7 +208,7 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
   if(showCopy) {
     const toolbar = document.createElement('div');
     toolbar.classList.add('toolbar');
-    
+
     const copyButton = document.createElement('a');
     copyButton.classList.add('copy-btn');
     if(isDarkStyle) {
@@ -223,7 +223,7 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
       e.cancelBubble = true;
       copyTextToClipboard(codeText);
     });
-    
+
     toolbar.appendChild(copyButton);
     targetDiv.appendChild(toolbar);
   }
