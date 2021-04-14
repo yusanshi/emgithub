@@ -19,7 +19,7 @@ Permanent links to [a file](https://docs.github.com/en/github/managing-files-in-
 - Use `#` to slice code, use `?ts=` to specify TAB width. An example using both of them: `?ts=2#L4-L12`.
 - The outermost div has a class attribute `emgithub-container`. Do any hacks you want.
 
-![](https://img.yusanshi.com/upload/20200301135039426771.gif)
+![](https://user-images.githubusercontent.com/36265606/114659094-8a070a00-9d25-11eb-9164-779e91f3ae46.gif)
 
 ## TODO
 
