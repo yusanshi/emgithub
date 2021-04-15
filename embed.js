@@ -190,10 +190,16 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
     }
   }
   code.classList.add(lang);
+  if (codeText[codeText.length -1] === "\n") {
+    // First remove the ending newline
+    codeText = codeText.slice(0,-1);
+  }
   if (startLine > 0) {
     codeTextSplit = codeText.split("\n");
     codeText = codeTextSplit.slice(startLine - 1, endLine).join("\n");
   }
+  // Then add the newline back
+  codeText = codeText + "\n";
   code.textContent = codeText;
   if (typeof hljs != "undefined" && typeof hljs.highlightBlock != "undefined") {
     hljs.highlightBlock(code);
@@ -218,7 +224,7 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
     }
     copyButton.href = 'javascript:void(0);'
     copyButton.innerHTML = 'Copy';
-    copyButton.addEventListener('click', function(e){
+    copyButton.addEventListener('click', function(e) {
       e.preventDefault();
       e.cancelBubble = true;
       copyTextToClipboard(codeText);
