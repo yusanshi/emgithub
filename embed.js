@@ -11,6 +11,7 @@ function embed() {
   const showLineNumbers = params.get("showLineNumbers") === "on";
   const showFileMeta = params.get("showFileMeta") === "on";
   const showCopy = params.get("showCopy") === "on";
+  const fetchFromJsDelivr = params.get("fetchFromJsDelivr") === "on";
   const lineSplit = target.hash.split("-");
   const startLine = target.hash !== "" && lineSplit[0].replace("#L", "") || -1;
   const endLine = target.hash !== "" && lineSplit.length > 1 && lineSplit[1].replace("L", "") || startLine;
@@ -21,7 +22,9 @@ function embed() {
   const branch = pathSplit[4];
   const file = pathSplit.slice(5, pathSplit.length).join("/");
   const fileExtension = file.split('.').length > 1 ? file.split('.')[file.split('.').length - 1] : 'txt';
-  const rawFileURL = `https://raw.githubusercontent.com/${user}/${repository}/${branch}/${file}`;
+  const rawFileURL = fetchFromJsDelivr
+    ? `https://cdn.jsdelivr.net/gh/${user}/${repository}@${branch}/${file}`
+    : `https://raw.githubusercontent.com/${user}/${repository}/${branch}/${file}`;
   // The id where code will be embeded. In order to support a single `target` embedded for multiple times,
   // we use a random string to avoid duplicated id.
   const containerId = Math.random().toString(36).substring(2);
