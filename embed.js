@@ -193,9 +193,9 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
     }
   }
   code.classList.add(lang);
-  if (codeText[codeText.length -1] === "\n") {
+  if (codeText[codeText.length - 1] === "\n") {
     // First remove the ending newline
-    codeText = codeText.slice(0,-1);
+    codeText = codeText.slice(0, -1);
   }
   if (startLine > 0) {
     codeTextSplit = codeText.split("\n");
@@ -214,20 +214,20 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
     });
   }
 
-  if(showCopy) {
+  if (showCopy) {
     const toolbar = document.createElement('div');
     toolbar.classList.add('toolbar');
 
     const copyButton = document.createElement('a');
     copyButton.classList.add('copy-btn');
-    if(isDarkStyle) {
+    if (isDarkStyle) {
       copyButton.classList.add('copy-btn-dark');
     } else {
       copyButton.classList.add('copy-btn-light');
     }
     copyButton.href = 'javascript:void(0);'
     copyButton.innerHTML = 'Copy';
-    copyButton.addEventListener('click', function(e) {
+    copyButton.addEventListener('click', function (e) {
       e.preventDefault();
       e.cancelBubble = true;
       copyTextToClipboard(codeText);
