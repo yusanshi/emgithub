@@ -272,11 +272,11 @@
         localStorage.setItem('style', document.getElementById('style').value);
 
         const target = $("#target").val();
-        const pattern = /^(https|http):\/\/github\.com(\/[A-Za-z0-9_\-\.]+){2}\/(tree|blob)\/[A-Za-z0-9_\-\.]+\//;
+        const pattern = /^https:\/\/github\.com\/(?:[A-Za-z0-9_\-\.]+\/){2}blob\/[A-Za-z0-9_\-\.]+\//;
         if (pattern.test(target)) {
           $("#target").removeClass("is-invalid");
           $("#target").addClass("is-valid");
-          const jsURL = `${new URL("./", window.location.href).href}embed.js?${$(this).serialize()}`;
+          const jsURL = `${parseURL().current}embed.js?${$(this).serialize()}`;
           const scriptTag = `<script src=\"${jsURL}\"><\/script>`;
           $("#embededCode").val(scriptTag);
           document.getElementById("previewArea").innerHTML = `<style>.lds-ring{margin:1rem auto;position:relative;width:60px;height:60px}.lds-ring div{box-sizing:border-box;display:block;position:absolute;width:48px;height:48px;margin:6px;border:6px solid #fff;border-radius:50%;animation:lds-ring 1.2s cubic-bezier(0.5,0,0.5,1) infinite;border-color:#888 transparent transparent transparent}.lds-ring div:nth-child(1){animation-delay:-.45s}.lds-ring div:nth-child(2){animation-delay:-.3s}.lds-ring div:nth-child(3){animation-delay:-.15s}@keyframes lds-ring{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}</style>
@@ -299,15 +299,15 @@
         copyTextToClipboard($("#embededCode").val());
       });
 
-      if (["/", "/index.html", "/index.htm", "/404.html"].includes(window.location.pathname)) {
+      const parts = parseURL();
+      if (parts.target !== null) {
+        // 404 triggered. Fill in target and simulate clicking
+        $("#target").val("https://github.com/" + parts.target);
+        $("#goForm").submit();
+      } else {
         // Is entering the site directly
         $("#target").attr("placeholder", "https://github.com/user/repository/blob/branch/src/hello.cpp#L2-L6");
-      } else {
-        // 404 triggered. Fill in target and simulate clicking
-        $("#target").val("https://github.com" + window.location.pathname + window.location.search + window.location.hash);
-        $("#goForm").submit();
       }
-
     });
 
     // https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
@@ -339,6 +339,22 @@
         console.error('Fallback: Oops, unable to copy', err);
       }
       document.body.removeChild(textArea);
+    }
+
+    function parseURL() {
+      const parts = {
+        current: null,
+        target: null
+      }
+      const pattern = /(.+?)((?:[A-Za-z0-9_\-\.]+\/){2}blob\/[A-Za-z0-9_\-\.]+\/.+)/;
+      const match = window.location.href.match(pattern);
+      if (match === null) {
+        parts.current = new URL("./", window.location.href).href
+      } else {
+        parts.current = match[1];
+        parts.target = match[2];
+      }
+      return parts;
     }
   </script>
 </body>
