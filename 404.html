@@ -150,11 +150,11 @@
         <label class="custom-control-label" for="showCopy">Copy button</label>
       </div>
       <div class="custom-control custom-checkbox custom-control-inline">
-        <input type="checkbox" class="custom-control-input" name="fetchFromJsDelivr" id="fetchFromJsDelivr" checked>
+        <input type="checkbox" class="custom-control-input" name="fetchFromJsDelivr" id="fetchFromJsDelivr">
         <label class="custom-control-label" for="fetchFromJsDelivr">
           Fetch from <a target="_blank" href="https://www.jsdelivr.com/">jsDelivr</a>
           <i data-toggle="popover" data-trigger="hover" data-placement="bottom"
-            data-content="Fetch raw files from jsDelivr instead of GitHub repository">
+            data-content="Fetch raw files from jsDelivr instead of GitHub repository, could be faster but may experience the cache issue (new changes may not be reflected timely).">
             <svg width="16" height="16" viewBox="0 0 16 16" style="vertical-align:-.125em">
               <path
                 d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z"
@@ -301,7 +301,7 @@
 
       const parts = parseURL();
       if (parts.target !== null) {
-        // 404 triggered. Fill in target and simulate clicking
+        // Fill in target and simulate clicking
         $("#target").val("https://github.com/" + parts.target);
         $("#goForm").submit();
       } else {
