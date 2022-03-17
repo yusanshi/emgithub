@@ -4,7 +4,7 @@ https://emgithub.com/
 
 Embed a file from Github repository just like [Github Gist](https://gist.github.com/). Unlike other websites that do similar work, EmGithub.com is a static site hosted on Github Pages. Fetching target files and highlighting are done on your browser.
 
-Related post: https://blog.yusanshi.com/2019-12-17-emgithub/
+Related post: https://yusanshi.com/posts/emgithub/
 
 ## Get started
 
