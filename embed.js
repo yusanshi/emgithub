@@ -140,7 +140,7 @@ function embed() {
     loadHLJSNum = loadHLJS.then(() =>
       (typeof hljs != "undefined" && typeof hljs.lineNumbersBlock != "undefined") ?
         Promise.resolve() : loadScript(HLJSNumURL)
-    )
+    );
   }
 
   const fetchFile = fetch(rawFileURL).then((response) => {
@@ -225,7 +225,7 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
     } else {
       copyButton.classList.add('copy-btn-light');
     }
-    copyButton.href = 'javascript:void(0);'
+    copyButton.href = 'javascript:void(0);';
     copyButton.innerHTML = 'Copy';
     copyButton.addEventListener('click', function (e) {
       e.preventDefault();
@@ -250,7 +250,7 @@ function embedCodeToTarget(targetDiv, codeText, showBorder, showLineNumbers, sho
     const rawFileURLSplit = rawFileURL.split("/");
     meta.innerHTML = `<a target="_blank" href="${rawFileURL}" style="float:right">view raw</a>
 <a target="_blank" href="${fileURL}">${rawFileURLSplit[rawFileURLSplit.length - 1]}</a>
-delivered <span class="hide-in-phone">with ❤ </span>by <a target="_blank" href="${serviceProvider}">EmGithub</a>`;
+delivered <span class="hide-in-phone">with ❤ </span>by <a target="_blank" href="${serviceProvider}">emgithub</a>`;
     meta.classList.add("file-meta");
     if (!isDarkStyle) {
       meta.classList.add("file-meta-light");
@@ -275,7 +275,7 @@ function copyTextToClipboard(text) {
     fallbackCopyTextToClipboard(text);
     return;
   }
-  navigator.clipboard.writeText(text)
+  navigator.clipboard.writeText(text);
 }
 
 function fallbackCopyTextToClipboard(text) {
