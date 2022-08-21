@@ -185,10 +185,14 @@
     background-color: #c4c4c4;
   }
 
-  .emgithub-file pre {
+  .emgithub-file .code-area pre {
     margin: 0;
     padding: 0;
     tab-size: ${tabSize};
+  }
+
+  .emgithub-file .html-area pre {
+    padding: 0;
   }
 
   .emgithub-file .hljs-ln-numbers {
@@ -295,10 +299,10 @@
   // Loading the external libraries
   const HLJSURL = "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.6.0/build/highlight.min.js";
   const HLJSNumURL = "https://cdn.jsdelivr.net/npm/highlightjs-line-numbers.js@2.8.0/dist/highlightjs-line-numbers.min.js";
+  const loadHLJS = typeof hljs != "undefined" && typeof hljs.highlightElement != "undefined" ? Promise.resolve() : loadScript(HLJSURL);
   // Always use hljs-num even if showLineNumbers is false for a consistent display
   // hljs-num should be loaded only after hljs is loaded
-  const loadHLJSNum = (typeof hljs != "undefined" && typeof hljs.highlightElement != "undefined" ? Promise.resolve() : loadScript(HLJSURL))
-    .then(() => (typeof hljs.lineNumbersBlock != "undefined" ? Promise.resolve() : loadScript(HLJSNumURL)));
+  const loadHLJSNum = loadHLJS.then(() => (typeof hljs.lineNumbersBlock != "undefined" ? Promise.resolve() : loadScript(HLJSNumURL)));
   const loadHLJSStyle = fetch(`https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.6.0/build/styles/${style}.min.css`)
     .then((response) => response.text())
     .then((text) => {
@@ -323,13 +327,8 @@
     promises.push(loadMarkdownStyle);
 
     if (type === 'ipynb') {
-      const loadAnsiUp = typeof AnsiUp != "undefined" ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/gh/drudru/ansi_up@5.1.0/ansi_up.min.js');
-      const loadNotebookjs = Promise.all([loadMarked, loadAnsiUp])
-        .then(() => (typeof nb != "undefined" ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/gh/jsvine/notebookjs@0.6.7/notebook.min.js')))
-        .then(() => {
-          nb.markdown = marked.parse;
-          nb.ansi = new AnsiUp().ansi_to_html;
-        });
+      const loadNotebookjs = loadMarked.then(() => (typeof nb != "undefined" ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/gh/jsvine/notebookjs@0.6.7/notebook.min.js')))
+        .then(() => { nb.markdown = marked.parse; });
       promises.push(loadNotebookjs);
     }
   }
@@ -393,7 +392,7 @@
     }
 
     if (type === 'markdown' || type === 'ipynb') {
-      targetDiv.querySelectorAll("code").forEach(codeTag => {
+      targetDiv.querySelectorAll("pre code").forEach(codeTag => {
         hljs.highlightElement(codeTag);
       });
     }
