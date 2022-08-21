@@ -132,12 +132,14 @@
       display: none;
     }
   }
+</style>
 
+<style>
   .emgithub-file .code-area {
     position: relative;
   }
 
-  .emgithub-file .copy-btn {
+  .emgithub-file .code-area .copy-btn {
     display: none;
     border-radius: 3px;
     font: bold 13px monospace;
@@ -149,38 +151,38 @@
     padding: 0.3rem;
   }
 
-  .emgithub-file:hover .copy-btn {
+  .emgithub-file:hover .code-area .copy-btn {
     display: block;
   }
 
-  .emgithub-file .copy-btn-light {
+  .emgithub-file .code-area .copy-btn-light {
     color: #586069;
     background-color: #f7f7f7;
     border: 1px solid #ccc;
   }
 
-  .emgithub-file .copy-btn-dark {
+  .emgithub-file .code-area .copy-btn-dark {
     color: #f7f7f7;
     background-color: #586069;
     border: 1px solid #555;
   }
 
-  .emgithub-file .copy-btn-light:hover {
+  .emgithub-file .code-area .copy-btn-light:hover {
     color: #f7f7f7;
     background-color: #586069;
   }
 
-  .emgithub-file .copy-btn-dark:hover {
+  .emgithub-file .code-area .copy-btn-dark:hover {
     color: #586069;
     background-color: #f7f7f7;
   }
 
-  .emgithub-file .copy-btn-light:active {
+  .emgithub-file .code-area .copy-btn-light:active {
     /* darken #586069 by 20% https://www.cssfontstack.com/oldsites/hexcolortool/ */
     background-color: #252d36;
   }
 
-  .emgithub-file .copy-btn-dark:active {
+  .emgithub-file .code-area .copy-btn-dark:active {
     /* darken #f7f7f7 by 20% */
     background-color: #c4c4c4;
   }
@@ -191,11 +193,7 @@
     tab-size: ${tabSize};
   }
 
-  .emgithub-file .html-area pre {
-    padding: 0;
-  }
-
-  .emgithub-file .hljs-ln-numbers {
+  .emgithub-file .code-area .hljs-ln-numbers {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -208,31 +206,61 @@
     vertical-align: top;
   }
 
-  .emgithub-file td.hljs-ln-numbers {
+  .emgithub-file .code-area td.hljs-ln-numbers {
     padding-right: 1rem;
   }
 
-  .emgithub-file td.hljs-ln-line {
+  .emgithub-file .code-area td.hljs-ln-line {
     line-height: 21px;
     font-size: 12px;
     font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
     border: 0;
   }
 
-  .emgithub-file table.hljs-ln {
+  .emgithub-file .code-area table.hljs-ln {
     border: 0;
     margin: 0;
   }
 
-  .emgithub-file pre code.hljs {
+  .emgithub-file .code-area pre code.hljs {
     padding: 0.8em;
   }
 
-  .emgithub-file .hide-line-numbers .hljs-ln-numbers {
+  .emgithub-file .code-area .hide-line-numbers .hljs-ln-numbers {
     display: none;
   }
+</style>
 
-  .emgithub-file .markdown-body {
+<style>
+  .emgithub-file .html-area pre {
+    padding: 0;
+    background-color: #fff;
+  }
+
+  .emgithub-file .html-area .nb-cell {
+    position: relative;
+  }
+
+  .emgithub-file .html-area .nb-output:before,
+  .emgithub-file .html-area .nb-input:before {
+    position: absolute;
+    font-family: monospace;
+    color: #999;
+    left: -7.5em;
+    width: 7em;
+    text-align: right;
+    font-size: 13px;
+  }
+
+  .emgithub-file .html-area .nb-input:before {
+    content: "In [" attr(data-prompt-number) "]:";
+  }
+
+  .emgithub-file .html-area .nb-output:before {
+    content: "Out [" attr(data-prompt-number) "]:";
+  }
+
+  .emgithub-file .html-area.markdown-body {
     box-sizing: border-box;
     min-width: 200px;
     max-width: 980px;
@@ -240,8 +268,13 @@
     padding: 45px;
   }
 
+  /* Reserve space for "In [1]", "Out [1]" */
+  .emgithub-file .html-area.markdown-body .nb-notebook {
+    padding-left: 65px;
+  }
+
   @media (max-width: 767px) {
-    .emgithub-file .markdown-body {
+    .emgithub-file .html-area.markdown-body {
       padding: 15px;
     }
   }
