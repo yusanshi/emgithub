@@ -306,7 +306,7 @@
     ${showFileMeta ? `<div class="file-meta file-meta-${isDarkStyle ? 'dark' : 'light'}"
       style="${showBorder ? '' : 'border:0'}">
       <a target="_blank" href="${rawFileURL}" style="float:right">view raw</a>
-      <a target="_blank" href="${fileURL}">${showFullPath ? fileFullPath : pathSplit[pathSplit.length - 1]}</a>
+      <a target="_blank" href="${fileURL}">${decodeURIComponent(showFullPath ? fileFullPath : pathSplit[pathSplit.length - 1])}</a>
       delivered <span class="hide-in-phone">with ❤ </span>by <a target="_blank" href="${serviceProvider}">emgithub</a>
     </div>`: ''
     }
