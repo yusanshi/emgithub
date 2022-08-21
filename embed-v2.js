@@ -21,14 +21,17 @@
   const user = pathSplit[1];
   const repository = pathSplit[2];
   const branch = pathSplit[4];
-  const fileFullPath = pathSplit.slice(5, pathSplit.length).join("/");
+  const filePath = pathSplit.slice(5, pathSplit.length).join("/");
   const directoryPath = pathSplit.slice(5, pathSplit.length - 1).join("/");
-  const fileExtension = fileFullPath.split('.').length > 1 ? fileFullPath.split('.').pop() : 'txt';
+  const fileExtension = filePath.split('.').length > 1 ? filePath.split('.').pop() : 'txt';
   const fileURL = target.href;
   const serviceProvider = sourceURL.origin;
   const rawFileURL = fetchFromJsDelivr
-    ? `https://cdn.jsdelivr.net/gh/${user}/${repository}@${branch}/${fileFullPath}`
-    : `https://raw.githubusercontent.com/${user}/${repository}/${branch}/${fileFullPath}`;
+    ? `https://cdn.jsdelivr.net/gh/${user}/${repository}@${branch}/${filePath}`
+    : `https://raw.githubusercontent.com/${user}/${repository}/${branch}/${filePath}`;
+  const rawDirectoryURL = fetchFromJsDelivr
+    ? `https://cdn.jsdelivr.net/gh/${user}/${repository}@${branch}/${directoryPath}/`
+    : `https://raw.githubusercontent.com/${user}/${repository}/${branch}/${directoryPath}/`;
 
   const containerId = Math.random().toString(36).substring(2);
   document.currentScript.insertAdjacentHTML(
@@ -307,7 +310,7 @@
     ${showFileMeta ? `<div class="file-meta file-meta-${isDarkStyle ? 'dark' : 'light'}"
       style="${showBorder ? '' : 'border:0'}">
       <a target="_blank" href="${rawFileURL}" style="float:right">view raw</a>
-      <a target="_blank" href="${fileURL}">${decodeURIComponent(showFullPath ? fileFullPath : pathSplit[pathSplit.length - 1])}</a>
+      <a target="_blank" href="${fileURL}">${decodeURIComponent(showFullPath ? filePath : pathSplit[pathSplit.length - 1])}</a>
       delivered <span class="hide-in-phone">with ❤ </span>by <a target="_blank" href="${serviceProvider}">emgithub</a>
     </div>`: ''
     }
@@ -408,7 +411,7 @@
       });
 
     } else if (type === 'markdown') {
-      targetDiv.querySelector(".html-area").innerHTML = fetchSuccess ? marked.parse(result[0].value, { baseUrl: `https://raw.githubusercontent.com/${user}/${repository}/${branch}/${directoryPath}/` }) : result[0].reason;
+      targetDiv.querySelector(".html-area").innerHTML = fetchSuccess ? marked.parse(result[0].value, { baseUrl: rawDirectoryURL }) : result[0].reason;
     } else if (type === 'ipynb') {
       try {
         if (fetchSuccess) {

@@ -573,6 +573,9 @@
     }
 
     function parseURL() {
+      // Returns:
+      //  parts.current: the current directory where the embed.js exists.
+      //  parts.target: the target file for embedding (if entering the site by replacing github.com)
       const parts = {
         current: null,
         target: null,
@@ -580,8 +583,10 @@
       const pattern = /(.+?)((?:[A-Za-z0-9_\-\.]+\/){2}blob\/[A-Za-z0-9_\-\.]+\/.+)/;
       const match = window.location.href.match(pattern);
       if (match === null) {
+        // Entering the site directly, no target specified.
         parts.current = new URL("./", window.location.href).href;
       } else {
+        // Entering the site by replacing github.com to XXXX. Parse the target from the URL.
         parts.current = match[1];
         parts.target = match[2];
       }
