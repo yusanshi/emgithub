@@ -318,14 +318,6 @@
         <label class="form-check-label" for="showLineNumbers">Line numbers</label>
       </div>
       <div class="form-check form-check-inline">
-        <input type="checkbox" class="form-check-input" name="showFileMeta" id="showFileMeta" checked>
-        <label class="form-check-label" for="showFileMeta">File meta</label>
-      </div>
-      <div class="form-check form-check-inline" id="showFullPathCheck">
-        <input type="checkbox" class="form-check-input" name="showFullPath" id="showFullPath" checked>
-        <label class="form-check-label" for="showFullPath">Full path in meta</label>
-      </div>
-      <div class="form-check form-check-inline">
         <input type="checkbox" class="form-check-input" name="showCopy" id="showCopy" checked>
         <label class="form-check-label" for="showCopy">Copy button</label>
       </div>
@@ -343,6 +335,14 @@
             </svg>
           </i>
         </label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input type="checkbox" class="form-check-input" name="showFileMeta" id="showFileMeta" checked>
+        <label class="form-check-label" for="showFileMeta">File meta</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input type="checkbox" class="form-check-input" name="showFullPath" id="showFullPath" checked>
+        <label class="form-check-label" for="showFullPath">Full path in meta</label>
       </div>
     </form>
 
@@ -449,8 +449,11 @@
 
         // Save current options using localStorage
         ['showBorder', 'showLineNumbers', 'showFileMeta', 'showFullPath', 'showCopy', 'fetchFromJsDelivr'].forEach(e => {
-          const newValue = document.getElementById(e).checked ? 'true' : 'false';
-          localStorage.setItem(e, newValue);
+          const element = document.getElementById(e);
+          if (!element.disabled) {
+            const newValue = element.checked ? 'true' : 'false';
+            localStorage.setItem(e, newValue);
+          }
         });
         localStorage.setItem('style', document.getElementById('style').value);
 
@@ -486,6 +489,7 @@
       toggleFullPathCheckDisplay();
       document.querySelector("#showFileMeta").addEventListener('change', toggleFullPathCheckDisplay);
 
+      document.querySelector("#type").addEventListener('change', toggleCheckStatus);
 
       const parts = parseURL();
       if (parts.target !== null) {
@@ -501,7 +505,7 @@
 
     function switchTypeSelect() {
       const fileExtension = document.querySelector("#target").value.split('.').pop().toLowerCase();
-      const typeSelect = document.getElementById('type');
+      const typeSelect = document.querySelector('#type');
       if (fileExtension == 'md' || fileExtension == 'markdown') {
         typeSelect.value = 'markdown';
       } else if (fileExtension == 'ipynb') {
@@ -509,6 +513,7 @@
       } else {
         typeSelect.value = 'code';
       }
+      toggleCheckStatus();
     }
 
     function toggleInputGroupClass() {
@@ -522,12 +527,19 @@
     }
 
     function toggleFullPathCheckDisplay() {
-      const showFullPathCheck = document.querySelector('#showFullPathCheck');
+      const showFullPathCheck = document.querySelector('#showFullPath').parentElement;
       if (document.querySelector('#showFileMeta').checked) {
         showFullPathCheck.classList.remove('d-none');
       } else {
         showFullPathCheck.classList.add('d-none');
       }
+    }
+
+    function toggleCheckStatus() {
+      const typeSelect = document.querySelector('#type');
+      ['showLineNumbers', 'showCopy'].forEach(e => {
+        document.getElementById(e).toggleAttribute("disabled", !(typeSelect.value == 'code'));
+      });
     }
 
     // https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
