@@ -460,9 +460,9 @@ function scopeCss(styleText, scopeSelector) {
       const cssSelectorPrepended = cssSelector.split(',').map(s => `${scopeSelector} ${s.trim()}`).join(',');
       rules.push(`${cssSelectorPrepended} ${cssBody}`);
     } else if (rule.constructor.name === 'CSSMediaRule') {
-      throw "NotImplementedError";
+      console.error("NotImplementedError", rule);
     } else {
-      throw "NotImplementedError";
+      console.error("NotImplementedError", rule);
     }
   }
   return rules.join('\n');
