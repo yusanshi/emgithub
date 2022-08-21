@@ -364,8 +364,15 @@
     promises.push(loadMarkdownStyle);
 
     if (type === 'ipynb') {
-      const loadNotebookjs = loadMarked.then(() => (typeof nb != "undefined" ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/gh/jsvine/notebookjs@0.6.7/notebook.min.js')))
-        .then(() => { nb.markdown = marked.parse; });
+      const loadAnsiUp = typeof AnsiUp != "undefined" ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/gh/drudru/ansi_up@5.1.0/ansi_up.min.js');
+      const loadNotebookjs = Promise.all([loadMarked, loadAnsiUp])
+        .then(() => (typeof nb != "undefined" ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/gh/jsvine/notebookjs@0.6.7/notebook.min.js')))
+        .then(() => {
+          nb.markdown = marked.parse;
+          const ansi_up = new AnsiUp();
+          // bind 'this' to fix 'TypeError: this.append_buffer is not a function'
+          nb.ansi = ansi_up.ansi_to_html.bind(ansi_up);
+        });
       promises.push(loadNotebookjs);
     }
   }
