@@ -22,6 +22,7 @@
   const repository = pathSplit[2];
   const branch = pathSplit[4];
   const fileFullPath = pathSplit.slice(5, pathSplit.length).join("/");
+  const directoryPath = pathSplit.slice(5, pathSplit.length - 1).join("/");
   const fileExtension = fileFullPath.split('.').length > 1 ? fileFullPath.split('.').pop() : 'txt';
   const fileURL = target.href;
   const serviceProvider = sourceURL.origin;
@@ -407,8 +408,7 @@
       });
 
     } else if (type === 'markdown') {
-      targetDiv.querySelector(".html-area").innerHTML = fetchSuccess ? marked.parse(result[0].value) : result[0].reason;
-      // TODO: relative path of files (img, etc...)
+      targetDiv.querySelector(".html-area").innerHTML = fetchSuccess ? marked.parse(result[0].value, { baseUrl: `https://raw.githubusercontent.com/${user}/${repository}/${branch}/${directoryPath}/` }) : result[0].reason;
     } else if (type === 'ipynb') {
       try {
         if (fetchSuccess) {
