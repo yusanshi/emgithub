@@ -480,8 +480,9 @@
 
       toggleInputGroupClass();
       window.addEventListener('resize', toggleInputGroupClass);
-      switchTypeSelect();
+
       targetInput.addEventListener('input', switchTypeSelect);
+
       toggleFullPathCheckDisplay();
       document.querySelector("#showFileMeta").addEventListener('change', toggleFullPathCheckDisplay);
 
@@ -490,6 +491,7 @@
       if (parts.target !== null) {
         // Fill in target and simulate clicking
         targetInput.value = "https://github.com/" + parts.target;
+        switchTypeSelect();
         document.querySelector("#goButton").click();
       } else {
         // Is entering the site directly

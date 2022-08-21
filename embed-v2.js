@@ -36,7 +36,7 @@
 
 <style>
   .lds-ring {
-    margin: 2rem auto;
+    margin: 3rem auto;
     position: relative;
     width: 60px;
     height: 60px
