@@ -4,6 +4,10 @@ https://emgithub.com/
 
 Embed a file from GitHub repository just like [GitHub Gist](https://gist.github.com/).
 
+Demo: <https://yusanshi.com/posts/2019-12-17/emgithub/> (scroll to the bottom of the page).
+
+![](https://user-images.githubusercontent.com/36265606/185886623-f5f5685d-1e99-43c8-8de2-085dd6954dd7.gif)
+
 ## Get started
 
 There are two ways to use the service:

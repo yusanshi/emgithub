@@ -376,7 +376,7 @@
           const ansi_up = new AnsiUp();
           // bind 'this' to fix 'TypeError: this.append_buffer is not a function'
           nb.ansi = ansi_up.ansi_to_html.bind(ansi_up);
-          // or: nb.ansi = (text) => { ansi_up.ansi_to_html(text); };
+          // or: nb.ansi = (text) => ansi_up.ansi_to_html(text);
         });
       promises.push(loadNotebookjs);
     }
