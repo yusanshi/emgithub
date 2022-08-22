@@ -368,12 +368,14 @@
     promises.push(loadKatexAutoRender);
 
     if (type === 'ipynb') {
-      const loadAnsiUp = typeof AnsiUp != "undefined" ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/gh/drudru/ansi_up@5.1.0/ansi_up.min.js');
-      const loadNotebookjs = Promise.all([loadMarked, loadAnsiUp])
+      const loadAnsiUp = typeof AnsiUp != "undefined" ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/gh/drudru/ansi_up@4.0.4/ansi_up.min.js');
+      const loadDOMPurify = typeof DOMPurify != "undefined" ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/npm/dompurify@2.3.10/dist/purify.min.js');
+      const loadNotebookjs = Promise.all([loadMarked, loadAnsiUp, loadDOMPurify])
         .then(() => (typeof nb != "undefined" ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/gh/jsvine/notebookjs@0.6.7/notebook.min.js')))
         .then(() => {
           nb.markdown = (text) => marked.parse(text, { baseUrl: rawDirectoryURL });
           const ansi_up = new AnsiUp();
+          ansi_up.escape_for_html = false; // https://github.com/drudru/ansi_up/issues/66
           // bind 'this' to fix 'TypeError: this.append_buffer is not a function'
           nb.ansi = ansi_up.ansi_to_html.bind(ansi_up);
           // or: nb.ansi = (text) => ansi_up.ansi_to_html(text);
