@@ -347,7 +347,6 @@
     });
 
   promises.push(loadHLJSNum);
-  promises.push(loadHLJSStyle);
 
   if (type === 'markdown' || type === 'ipynb') {
     const loadMarked = typeof marked != "undefined" ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/npm/marked@4.0.18/marked.min.js');
@@ -362,13 +361,10 @@
       .then((text) => {
         insertStyle(text.replaceAll('url(fonts/', 'url(https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/fonts/'));
       });
-    // TODO: is the 'defer' making sense?
-    const loadKatex = typeof katex != "undefined" ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js', defer = true);
-    const loadKatexAutoRender = loadKatex.then(() => typeof renderMathInElement != "undefined" ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js', defer = true));
+    const loadKatex = typeof katex != "undefined" ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js');
+    const loadKatexAutoRender = loadKatex.then(() => typeof renderMathInElement != "undefined" ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js'));
 
     promises.push(loadMarked);
-    promises.push(loadMarkdownStyle);
-    promises.push(loadKatexStyle);
     promises.push(loadKatexAutoRender);
 
     if (type === 'ipynb') {
@@ -447,7 +443,7 @@
       targetDiv.querySelectorAll("pre code").forEach(codeTag => {
         hljs.highlightElement(codeTag);
       });
-      renderMathInElement(targetDiv.querySelector(".html-area"), {
+      renderMathInElement(targetDiv, {
         delimiters: [
           { left: '$$', right: '$$', display: true },
           { left: '$', right: '$', display: false },
@@ -466,11 +462,10 @@
 
 
 
-function loadScript(src, defer = false) {
+function loadScript(src) {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
     script.src = src;
-    script.defer = defer;
     script.onload = resolve;
     script.onerror = reject;
     document.head.appendChild(script);
