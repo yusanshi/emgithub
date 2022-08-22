@@ -372,7 +372,7 @@
       const loadNotebookjs = Promise.all([loadMarked, loadAnsiUp])
         .then(() => (typeof nb != "undefined" ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/gh/jsvine/notebookjs@0.6.7/notebook.min.js')))
         .then(() => {
-          nb.markdown = marked.parse;
+          nb.markdown = (text) => marked.parse(text, { baseUrl: rawDirectoryURL });
           const ansi_up = new AnsiUp();
           // bind 'this' to fix 'TypeError: this.append_buffer is not a function'
           nb.ansi = ansi_up.ansi_to_html.bind(ansi_up);
