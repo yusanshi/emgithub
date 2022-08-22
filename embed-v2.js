@@ -343,9 +343,7 @@
   const loadHLJSStyle = fetch(`https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.6.0/build/styles/${style}.min.css`)
     .then((response) => response.text())
     .then((text) => {
-      const styleElement = document.createElement('style');
-      styleElement.textContent = scopeCss(text, '.' + styleClassName);
-      document.head.appendChild(styleElement);
+      insertStyle(scopeCss(text, '.' + styleClassName));
     });
 
   promises.push(loadHLJSNum);
@@ -356,12 +354,22 @@
     const loadMarkdownStyle = fetch('https://cdn.jsdelivr.net/gh/sindresorhus/github-markdown-css@5.1.0/github-markdown-light.min.css')
       .then((response) => response.text())
       .then((text) => {
-        const styleElement = document.createElement('style');
-        styleElement.textContent = text;
-        document.head.appendChild(styleElement);
+        insertStyle(text);
       });
+
+    const loadKatexStyle = fetch('https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css')
+      .then((response) => response.text())
+      .then((text) => {
+        insertStyle(text.replaceAll('url(fonts/', 'url(https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/fonts/'));
+      });
+    // TODO: is the 'defer' making sense?
+    const loadKatex = typeof katex != "undefined" ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js', defer = true);
+    const loadKatexAutoRender = loadKatex.then(() => typeof renderMathInElement != "undefined" ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js', defer = true));
+
     promises.push(loadMarked);
     promises.push(loadMarkdownStyle);
+    promises.push(loadKatexStyle);
+    promises.push(loadKatexAutoRender);
 
     if (type === 'ipynb') {
       const loadAnsiUp = typeof AnsiUp != "undefined" ? Promise.resolve() : loadScript('https://cdn.jsdelivr.net/gh/drudru/ansi_up@5.1.0/ansi_up.min.js');
@@ -372,6 +380,7 @@
           const ansi_up = new AnsiUp();
           // bind 'this' to fix 'TypeError: this.append_buffer is not a function'
           nb.ansi = ansi_up.ansi_to_html.bind(ansi_up);
+          // or: nb.ansi = (text) => { ansi_up.ansi_to_html(text); };
         });
       promises.push(loadNotebookjs);
     }
@@ -438,6 +447,15 @@
       targetDiv.querySelectorAll("pre code").forEach(codeTag => {
         hljs.highlightElement(codeTag);
       });
+      renderMathInElement(targetDiv.querySelector(".html-area"), {
+        delimiters: [
+          { left: '$$', right: '$$', display: true },
+          { left: '$', right: '$', display: false },
+          { left: '\\(', right: '\\)', display: false },
+          { left: '\\[', right: '\\]', display: true },
+        ],
+        throwOnError: false
+      });
     }
 
     targetDiv.querySelector(".lds-ring").style.display = "none";
@@ -448,14 +466,21 @@
 
 
 
-function loadScript(src) {
+function loadScript(src, defer = false) {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
     script.src = src;
+    script.defer = defer;
     script.onload = resolve;
     script.onerror = reject;
     document.head.appendChild(script);
   });
+}
+
+function insertStyle(text) {
+  const styleElement = document.createElement('style');
+  styleElement.textContent = text;
+  document.head.appendChild(styleElement);
 }
 
 // https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript

@@ -35,8 +35,8 @@
 <body>
   <main role="main" class="container my-5">
     <h1>emgithub</h1>
-    <p class="lead">Embed a file from Github repository just like <a target="_blank"
-        href="https://gist.github.com/">Github Gist</a>. See <a target="_blank"
+    <p class="lead">Embed a file from GitHub repository just like <a target="_blank"
+        href="https://gist.github.com/">GitHub Gist</a>. See <a target="_blank"
         href="https://github.com/yusanshi/emgithub">the GitHub repository</a> for details.</p>
     <form id="goForm" class="my-4">
       <div class="input-group input-group-lg has-validation my-2">
@@ -312,6 +312,14 @@
         <label class="form-check-label" for="showLineNumbers">Line numbers</label>
       </div>
       <div class="form-check form-check-inline">
+        <input type="checkbox" class="form-check-input" name="showFileMeta" id="showFileMeta" checked>
+        <label class="form-check-label" for="showFileMeta">File meta</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input type="checkbox" class="form-check-input" name="showFullPath" id="showFullPath" checked>
+        <label class="form-check-label" for="showFullPath">Full path in meta</label>
+      </div>
+      <div class="form-check form-check-inline">
         <input type="checkbox" class="form-check-input" name="showCopy" id="showCopy" checked>
         <label class="form-check-label" for="showCopy">Copy button</label>
       </div>
@@ -329,14 +337,6 @@
             </svg>
           </i>
         </label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input type="checkbox" class="form-check-input" name="showFileMeta" id="showFileMeta" checked>
-        <label class="form-check-label" for="showFileMeta">File meta</label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input type="checkbox" class="form-check-input" name="showFullPath" id="showFullPath" checked>
-        <label class="form-check-label" for="showFullPath">Full path in meta</label>
       </div>
     </form>
 
@@ -444,7 +444,8 @@
         // Save current options using localStorage
         ['showBorder', 'showLineNumbers', 'showFileMeta', 'showFullPath', 'showCopy', 'fetchFromJsDelivr'].forEach(e => {
           const element = document.getElementById(e);
-          if (!element.disabled) {
+          if (!element.parentElement.classList.contains('d-none')) {
+            // Only save the non-hidden options
             const newValue = element.checked ? 'true' : 'false';
             localStorage.setItem(e, newValue);
           }
@@ -539,7 +540,12 @@
     function toggleCheckStatus() {
       const typeSelect = document.querySelector('#type');
       ['showLineNumbers', 'showCopy'].forEach(e => {
-        document.getElementById(e).toggleAttribute("disabled", !(typeSelect.value == 'code'));
+        const check = document.getElementById(e).parentElement;
+        if (typeSelect.value == 'code') {
+          check.classList.remove('d-none');
+        } else {
+          check.classList.add('d-none');
+        }
       });
     }
 

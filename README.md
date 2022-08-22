@@ -2,7 +2,7 @@
 
 https://emgithub.com/
 
-Embed a file from Github repository just like [Github Gist](https://gist.github.com/).
+Embed a file from GitHub repository just like [GitHub Gist](https://gist.github.com/).
 
 ## Get started
 
@@ -16,8 +16,8 @@ There are two ways to use the service:
 - Support permanent links to [a file](https://docs.github.com/en/github/managing-files-in-a-repository/getting-permanent-links-to-files) or [a code snippet](https://docs.github.com/en/github/managing-your-work-on-github/creating-a-permanent-link-to-a-code-snippet) (use `#` to slice code).
 
 - Specify TAB width with `?ts=`. Note when used together with code slicing, you should combine them like this: `?ts=2#L4-L12`.
-- Support Markdown (`*.md`) and Jupyter Notebook (`*.ipynb`) rendering, although currently LaTeX is not supported.
-- If the preview in https://emgithub.com/ is OK but it looks strange when embedded into the target web page, chances are that the style is override by the target web page. In this case, you may need to write some CSS styles to fix it (and `!important` may be needed). Below is the skeleton for embedding which may be helpful for writing CSS styles.
+- Support Markdown (`*.md`) and Jupyter Notebook (`*.ipynb`) rendering.
+- If the preview in https://emgithub.com/ is OK but it looks strange when embedded into the target web page, chances are that the styles are overridden by the target web page. In this case, you may need to write some CSS styles to fix it (and `!important` may be needed). Below is the skeleton for embedding which may be helpful for writing CSS styles.
 
   ```html
   <div class="emgithub-container">
@@ -46,8 +46,6 @@ There are two ways to use the service:
   ```
 
 ## Development
-
-### Test
 
 You can modify the code and test it by launching an HTTP server in the project directory.
 
