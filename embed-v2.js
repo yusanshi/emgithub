@@ -441,6 +441,10 @@
 
     if (type === 'markdown' || type === 'ipynb') {
       targetDiv.querySelectorAll("pre code").forEach(codeTag => {
+        if (type === 'ipynb' && codeTag.classList.contains("lang-undefined")) {
+          codeTag.classList.remove("lang-undefined");
+          codeTag.classList.add("lang-python");
+        }
         hljs.highlightElement(codeTag);
       });
       renderMathInElement(targetDiv, {
