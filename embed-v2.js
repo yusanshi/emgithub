@@ -403,6 +403,15 @@
       } else {
         codeText = result[0].reason;
       }
+      
+      // Strip leading whitespace as otherwise we get pointless whitespace/indentation for code snippets from the middle of functions
+      let stripText = "\n"
+      while (codeText[0] === " ")
+      {
+        codeText = codeText.slice(1);
+        stripText += " "
+      }
+      codeText = codeText.replace(new RegExp(stripText, 'g'), "\n");
 
       const codeTag = targetDiv.querySelector("code");
       codeTag.textContent = codeText;
