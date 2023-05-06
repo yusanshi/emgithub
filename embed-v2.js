@@ -358,6 +358,10 @@
       .then((response) => response.text())
       .then((text) => {
         insertStyle(text);
+        // TODO: `scopeCss` can not handle `github-markdown-css` well.
+        // So currently you should not mix the usage of light and dark styles for markdown or jupyter files
+        // (but use two different light (or dark) styles in a page are OK)
+        // insertStyle(scopeCss(text, '.' + styleClassName));
       });
 
     const loadKatexStyle = fetch('https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css')
