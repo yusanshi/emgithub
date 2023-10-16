@@ -10,6 +10,8 @@
   const showBorder = params.get("showBorder") === "on";
   const showLineNumbers = params.get("showLineNumbers") === "on";
   const showFileMeta = params.get("showFileMeta") === "on";
+  const collapsible = params.get("collapsible") === "open" || params.get("collapsible") === "closed";
+  const collapsibleOpen = params.get("collapsible") === "open";
   const showFullPath = params.get("showFullPath") === "on";
   const showCopy = params.get("showCopy") === "on";
   const fetchFromJsDelivr = params.get("fetchFromJsDelivr") === "on";
@@ -299,6 +301,10 @@
 
   <div class="emgithub-file emgithub-file-${isDarkStyle ? 'dark' : 'light'}"
     style="display:none;${showBorder ? '' : 'border:0'}">
+    ${collapsible ? `<details class="emgithub-details"${collapsibleOpen ? ' open':''}>
+      <summary class="emgithub-summary">
+        <a target="_blank" href="${fileURL}">${decodeURIComponent(showFullPath ? filePath : pathSplit[pathSplit.length - 1])}</a>
+      </summary>`:''}
     <div class="file-data ${styleClassName}">
       ${type === 'code' ? `<div class="code-area">
         ${showCopy ? `<a class="copy-btn copy-btn-${isDarkStyle ? 'dark' : 'light'}" href="javascript:void(0)">Copy</a>`
@@ -318,7 +324,7 @@
       delivered <span class="hide-in-phone">with ❤ </span>by <a target="_blank" href="${serviceProvider}">emgithub</a>
     </div>`: ''
     }
-
+    ${collapsible ? `</details>`:''}
   </div>
 
 </div>
