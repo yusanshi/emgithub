@@ -29,11 +29,20 @@
     .custom-select {
       padding: .375rem 2.25rem .375rem .75rem !important;
     }
+   .setting-btn {
+     font-size: .8em;
+     position: absolute;
+     top: 0;
+     border: 0;
+     left: 0;
+   }
   </style>
 </head>
 
 <body>
   <main role="main" class="container my-5">
+    <button id="settingButton" class="btn setting-btn">Toggle setting</button>
+    <div id="settingMain" style="display: none;">
     <h1>emgithub</h1>
     <p class="lead">Embed a file from GitHub repository just like <a target="_blank"
         href="https://gist.github.com/">GitHub Gist</a>. See <a target="_blank"
@@ -352,6 +361,7 @@
     </div>
     <label for="previewArea">Preview</label>
     <div style="margin-bottom:-0.5em"></div>
+    </div>
     <div id="previewArea">
       <div class="text-center m-5">
         <svg width="80" height="80" viewBox="0 0 522.468 522.469">
@@ -368,8 +378,8 @@
       </div>
     </div>
   </main>
-  <a target="_blank" href="https://github.com/yusanshi/emgithub" class="github-corner"
-    aria-label="View source on GitHub">
+  <a id="githubBanner" target="_blank" href="https://github.com/yusanshi/emgithub" class="github-corner"
+    aria-label="View source on GitHub" style="display: none;">
     <svg width="80" height="80" viewBox="0 0 250 250"
       style="fill:#64CEAA; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
       <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
@@ -474,6 +484,19 @@
 
       document.querySelector("#copyButton").addEventListener("click", (e) => {
         copyTextToClipboard(document.querySelector("#embededCode").value);
+      });
+
+      document.querySelector("#settingButton").addEventListener("click", (e) => {
+        const mainStyle = document.querySelector("#settingMain").style;
+        const githubBannerStyle = document.querySelector("#githubBanner").style;
+        if (mainStyle.display === "none") {
+          mainStyle.display="block";
+          githubBannerStyle.display="block";
+        }
+        else {
+          mainStyle.display="none";
+          githubBannerStyle.display="none";
+        }
       });
 
       toggleInputGroupClass();
