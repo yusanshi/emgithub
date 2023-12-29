@@ -623,26 +623,15 @@
    function onStyleChange(targetEl, callback) {
      // create a MutationObserver with a callback function
      const observer = new MutationObserver((mutations) => {
-       // loop through the mutations array
-       for (let mutation of mutations) {
-         // check if the mutation type is 'attributes' and the attribute name is 'style'
-         if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-           // get the target element of the mutation
-           const target = mutation.target;
-           // get the old and new values of the style attribute
-           const oldValue = mutation.oldValue;
-           const newValue = target.getAttribute('style');
-           // compare the old and new values and call callback function
-           callback()
-         }
-       }
+       // call callback once upon any mutation
+       callback()
      });
 
      // specify the options for the observer
      const options = {
        attributes: true, // observe changes in attributes
        attributeFilter: ['style'], // only observe changes in the 'style' attribute
-       attributeOldValue: true, // report the old value of the attribute
+       attributeOldValue: false, // do not report the old value of the attribute
      };
      observer.observe(targetEl, options)
    }
