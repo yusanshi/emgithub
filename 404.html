@@ -625,6 +625,8 @@
      const observer = new MutationObserver((mutations) => {
        // call callback once upon any mutation
        callback()
+       // disconnect the observer after the callback is done
+       observer.disconnect();
      });
 
      // specify the options for the observer
