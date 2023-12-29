@@ -10,6 +10,9 @@
     <script>
         const script = document.createElement('script');
         script.src = window.location.href.replace('iframe.html', 'embed-v2.js');
+        script.onload = function () {
+            document.querySelector(".emgithub-file").style.margin = "0";
+        }
         document.querySelector("body").appendChild(script);
     </script>
 </body>
