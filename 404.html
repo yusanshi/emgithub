@@ -445,6 +445,7 @@
 
       const targetInput = document.querySelector("#target");
 
+      let heightObserver;
       document.querySelector("#goForm").addEventListener("submit", (e) => {
         e.preventDefault();
 
@@ -471,16 +472,19 @@
           const script = document.createElement('script');
           script.src = jsURL;
           const previewArea = document.getElementById("previewArea");
-          previewArea.innerHTML = '';
-          previewArea.appendChild(script);
 
           const iframeURL = jsURL.replace('embed-v2.js', 'iframe.html');
-          const iframeTag = `<iframe frameborder="0" scrolling="no" style="width:100%; height:%HEIGHT%px;" allow="clipboard-write" src=\"${iframeURL}\"><\/iframe>`;
-          script.onload = function () {
-            onStyleChange(previewArea.querySelector(".lds-ring"), function () {
-              document.querySelector("#embededIframeCode").value = iframeTag.replace("%HEIGHT%", previewArea.offsetHeight + 16);
-            });
+          const setIframeCode = () => {
+            document.querySelector("#embededIframeCode").value = `<iframe frameborder="0" scrolling="no" style="width:100%; height:${previewArea.offsetHeight + 16}px;" allow="clipboard-write" src=\"${iframeURL}\"><\/iframe>`;;
           };
+          if (heightObserver !== undefined) {
+            heightObserver.disconnect();
+          }
+          heightObserver = new ResizeObserver(setIframeCode);
+          heightObserver.observe(previewArea);
+
+          previewArea.innerHTML = '';
+          previewArea.appendChild(script);
         } else {
           targetInput.classList.remove("is-valid");
           targetInput.classList.add("is-invalid");
@@ -618,24 +622,6 @@
         parts.target = match[2];
       }
       return parts;
-    }
-
-    function onStyleChange(targetEl, callback) {
-      // create a MutationObserver with a callback function
-      const observer = new MutationObserver((mutations) => {
-        // call callback once upon any mutation
-        callback();
-        // disconnect the observer after the callback is done
-        observer.disconnect();
-      });
-
-      // specify the options for the observer
-      const options = {
-        attributes: true, // observe changes in attributes
-        attributeFilter: ['style'], // only observe changes in the 'style' attribute
-        attributeOldValue: false, // do not report the old value of the attribute
-      };
-      observer.observe(targetEl, options);
     }
   </script>
 </body>
