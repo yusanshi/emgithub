@@ -475,8 +475,12 @@
           previewArea.appendChild(script);
 
           const iframeURL = jsURL.replace('embed-v2.js', 'iframe.html');
-          const iframeTag = `<iframe frameborder="0" style="width:100%;" allow="clipboard-write" onload="window.addEventListener('message', (event) => { if (event.source === this.contentWindow && event.data.type === 'iframe-height') { this.style.height = event.data.height+'px'; }})" src=\"${iframeURL}\"><\/iframe>`;
-          document.querySelector("#embededIframeCode").value = iframeTag;
+          const iframeTag = `<iframe frameborder="0" scrolling="no" style="width:100%; height:%HEIGHT%px;" allow="clipboard-write" src=\"${iframeURL}\"><\/iframe>`;
+          script.onload = function () {
+            onStyleChange(previewArea.querySelector(".lds-ring"), function () {
+              document.querySelector("#embededIframeCode").value = iframeTag.replace("%HEIGHT%", previewArea.offsetHeight);
+            });
+          };
         } else {
           targetInput.classList.remove("is-valid");
           targetInput.classList.add("is-invalid");
@@ -614,6 +618,24 @@
         parts.target = match[2];
       }
       return parts;
+    }
+
+    function onStyleChange(targetEl, callback) {
+      // create a MutationObserver with a callback function
+      const observer = new MutationObserver((mutations) => {
+        // call callback once upon any mutation
+        callback();
+        // disconnect the observer after the callback is done
+        observer.disconnect();
+      });
+
+      // specify the options for the observer
+      const options = {
+        attributes: true, // observe changes in attributes
+        attributeFilter: ['style'], // only observe changes in the 'style' attribute
+        attributeOldValue: false, // do not report the old value of the attribute
+      };
+      observer.observe(targetEl, options);
     }
   </script>
 </body>
