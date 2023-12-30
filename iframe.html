@@ -10,7 +10,23 @@
     <script>
         const script = document.createElement('script');
         script.src = window.location.href.replace('iframe.html', 'embed-v2.js');
-        document.querySelector("body").appendChild(script);
+        document.body.appendChild(script);
+
+        const notifyHeight = () => {
+            height = document.body.scrollHeight;
+            console.log(`Height changed to ${height}`);
+            window.parent.postMessage({
+                type: 'iframe-height',
+                height
+            }, '*');
+        };
+
+        const observer = new MutationObserver(notifyHeight);
+        observer.observe(document.body, {
+            subtree: true,
+            childList: true,
+        });
+
     </script>
 </body>
 

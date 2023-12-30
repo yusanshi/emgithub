@@ -330,9 +330,8 @@
   const fetchFile = fetch(rawFileURL).then((response) => {
     if (response.ok) {
       return response.text();
-    } else {
-      return Promise.reject(`${response.status}\nFailed to download ${rawFileURL}`);
     }
+    return Promise.reject(`${response.status}\nFailed to download ${rawFileURL}`);
   });
   promises.push(fetchFile);
 

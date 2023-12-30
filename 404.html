@@ -475,7 +475,7 @@
           previewArea.appendChild(script);
 
           const iframeURL = jsURL.replace('embed-v2.js', 'iframe.html');
-          const iframeTag = `<iframe frameborder="0" style="width:100%; height:500px;" allow="clipboard-write" src=\"${iframeURL}\"><\/iframe>`;
+          const iframeTag = `<iframe frameborder="0" style="width:100%;" allow="clipboard-write" onload="window.addEventListener('message', (event) => { if (event.source === this.contentWindow && event.data.type === 'iframe-height') { this.style.height = event.data.height+'px'; }})" src=\"${iframeURL}\"><\/iframe>`;
           document.querySelector("#embededIframeCode").value = iframeTag;
         } else {
           targetInput.classList.remove("is-valid");
