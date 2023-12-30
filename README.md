@@ -18,36 +18,9 @@ There are two ways to use the service:
 **ProTip**
 
 - Support permanent links to [a file](https://docs.github.com/en/github/managing-files-in-a-repository/getting-permanent-links-to-files) or [a code snippet](https://docs.github.com/en/github/managing-your-work-on-github/creating-a-permanent-link-to-a-code-snippet) (use `#` to slice code).
-
 - Specify TAB width with `?ts=`. Note when used together with code slicing, you should combine them like this: `?ts=2#L4-L12`.
 - Support Markdown (`*.md`) and Jupyter Notebook (`*.ipynb`) rendering.
-- If the preview in https://emgithub.com/ is OK but it looks strange when embedded into the target web page, chances are that the styles are overridden by the target web page. In this case, you may need to write some CSS styles to fix it (and `!important` may be needed). Below is the skeleton for embedding which may be helpful for writing CSS styles.
-
-  ```html
-  <div class="emgithub-container">
-    <div class="emgithub-file">
-      <div class="file-data">
-        <div class="code-area">
-          <!-- for regular code embedding -->
-          <a class="copy-btn">Copy</a>
-          <pre>
-            <code>
-              <!-- code content -->
-          </code>
-        </pre>
-        </div>
-  
-        <div class="html-area markdown-body">
-          <!-- for Markdown/Jupyter Notebook  -->
-        </div>
-      </div>
-  
-      <div class="file-meta">
-        <!-- footer -->
-      </div>
-    </div>
-  </div>
-  ```
+- Support `<script>` and `<iframe>` embedding. Generally the `<script>` should be preferred for being more *lightweight*. But if your platform doesn't support `<script>` embedding (the case with [Obsidian](https://obsidian.md/)), or the snippets look strange when embedded into the target web page (most likely the styles are overridden by the target page), you can try the `<iframe>` embedding.
 
 ## Development
 
@@ -70,7 +43,7 @@ You may want to create your own **emgithub** for some reasons, like:
 
 - To fit your personal needs.
 - For security. Say if <https://emgithub.com/> is hacked...
-- For stability. There may be some breaking changes with <https://emgithub.com/> (although I'm trying to avoid this, e.g., when there are major changes, `embed-v2.js`, `embed-v3.js` ... are used. In this way, the former embeddings are not influenced).
+- For stability. There may be some breaking changes with <https://emgithub.com/> (although I'm trying to avoid this, e.g., when there are major changes, `embed-v2.js`, `embed-v3.js` ... are used. In this way, the former embeddings are not affected).
 
 To do this, you can use either GitHub Pages or your own web server.
 

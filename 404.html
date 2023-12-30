@@ -340,16 +340,23 @@
       </div>
     </form>
 
-    <label for="embededCode" class="form-label">Code to embed</label>
-    <div class="input-group input-group-lg mb-4">
-      <input type="text" id="embededCode" class="form-control" onclick="this.select();" readonly>
-
+    <label for="embededScriptCode" class="form-label"><code>&lt;script&gt;</code> to embed</label>
+    <div class="input-group input-group-lg mb-3">
+      <input type="text" id="embededScriptCode" class="form-control" onclick="this.select();" readonly>
       <!-- Not use <button> here, see https://getbootstrap.com/docs/5.2/components/popovers/#dismiss-on-next-click -->
-      <a tabindex="0" class="btn btn btn-outline-secondary text-decoration-none" id="copyButton" role="button"
+      <a tabindex="0" class="btn btn btn-outline-secondary text-decoration-none" id="copyScriptButton" role="button"
         data-bs-toggle="popover" data-bs-custom-class="custom-popover" data-bs-trigger="focus"
         data-bs-placement="bottom" data-bs-content="Copied!">Copy</a>
-
     </div>
+
+    <label for="embededIframeCode" class="form-label"><code>&lt;iframe&gt;</code> to embed</label>
+    <div class="input-group input-group-lg mb-4">
+      <input type="text" id="embededIframeCode" class="form-control" onclick="this.select();" readonly>
+      <a tabindex="0" class="btn btn btn-outline-secondary text-decoration-none" id="copyIframeButton" role="button"
+        data-bs-toggle="popover" data-bs-custom-class="custom-popover" data-bs-trigger="focus"
+        data-bs-placement="bottom" data-bs-content="Copied!">Copy</a>
+    </div>
+
     <label for="previewArea">Preview</label>
     <div style="margin-bottom:-0.5em"></div>
     <div id="previewArea">
@@ -438,6 +445,7 @@
 
       const targetInput = document.querySelector("#target");
 
+      let heightObserver;
       document.querySelector("#goForm").addEventListener("submit", (e) => {
         e.preventDefault();
 
@@ -460,10 +468,21 @@
 
           const jsURL = `${parseURL().current}embed-v2.js?${new URLSearchParams(new FormData(document.querySelector("#goForm"))).toString()}`;
           const scriptTag = `<script src=\"${jsURL}\"><\/script>`;
-          document.querySelector("#embededCode").value = scriptTag;
+          document.querySelector("#embededScriptCode").value = scriptTag;
           const script = document.createElement('script');
           script.src = jsURL;
           const previewArea = document.getElementById("previewArea");
+
+          const iframeURL = jsURL.replace('embed-v2.js', 'iframe.html');
+          const setIframeCode = () => {
+            document.querySelector("#embededIframeCode").value = `<iframe frameborder="0" scrolling="no" style="width:100%; height:${previewArea.offsetHeight + 16}px;" allow="clipboard-write" src=\"${iframeURL}\"><\/iframe>`;;
+          };
+          if (heightObserver !== undefined) {
+            heightObserver.disconnect();
+          }
+          heightObserver = new ResizeObserver(setIframeCode);
+          heightObserver.observe(previewArea);
+
           previewArea.innerHTML = '';
           previewArea.appendChild(script);
         } else {
@@ -472,8 +491,12 @@
         }
       });
 
-      document.querySelector("#copyButton").addEventListener("click", (e) => {
-        copyTextToClipboard(document.querySelector("#embededCode").value);
+      document.querySelector("#copyScriptButton").addEventListener("click", (e) => {
+        copyTextToClipboard(document.querySelector("#embededScriptCode").value);
+      });
+
+      document.querySelector("#copyIframeButton").addEventListener("click", (e) => {
+        copyTextToClipboard(document.querySelector("#embededIframeCode").value);
       });
 
       toggleInputGroupClass();

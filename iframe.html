@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body style="margin:0;">
+  <script>
+    const script = document.createElement('script');
+    script.src = window.location.href.replace('iframe.html', 'embed-v2.js');
+    script.onload = function () {
+      document.querySelector(".emgithub-file").style.margin = "0";
+    };
+    document.body.appendChild(script);
+  </script>
+</body>
+
+</html>
