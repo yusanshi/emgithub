@@ -478,7 +478,7 @@
           const iframeTag = `<iframe frameborder="0" scrolling="no" style="width:100%; height:%HEIGHT%px;" allow="clipboard-write" src=\"${iframeURL}\"><\/iframe>`;
           script.onload = function () {
             onStyleChange(previewArea.querySelector(".lds-ring"), function () {
-              document.querySelector("#embededIframeCode").value = iframeTag.replace("%HEIGHT%", previewArea.offsetHeight);
+              document.querySelector("#embededIframeCode").value = iframeTag.replace("%HEIGHT%", previewArea.offsetHeight + 16);
             });
           };
         } else {
