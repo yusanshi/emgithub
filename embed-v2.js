@@ -13,6 +13,10 @@
   const showFullPath = params.get("showFullPath") === "on";
   const showCopy = params.get("showCopy") === "on";
   const fetchFromJsDelivr = params.get("fetchFromJsDelivr") === "on";
+  const maxHeight = (() => {
+    const parsedValue = Number.parseInt(params.get('maxHeight'), 10);
+    return Number.isNaN(parsedValue) ? undefined : parsedValue;
+  })();
   const lineSplit = target.hash.split("-");
   const startLine = target.hash !== "" && lineSplit[0].replace("#L", "") || -1;
   const endLine = target.hash !== "" && lineSplit.length > 1 && lineSplit[1].replace("L", "") || startLine;
@@ -231,6 +235,13 @@
     padding: 0.8em;
   }
 
+  /* use where() for backward compatibility */
+  :where(.emgithub-file .code-area pre code.hljs) {
+    box-sizing: border-box;
+    max-height: ${maxHeight ? maxHeight + 'px' : 'none'};
+    overflow-y: ${maxHeight ? 'auto' : 'visible'};
+  }
+
   .emgithub-file .code-area .hide-line-numbers .hljs-ln-numbers {
     display: none;
   }
@@ -274,6 +285,12 @@
     max-width: 980px;
     margin: 0 auto;
     padding: 45px;
+  }
+
+  /* use where() for backward compatibility */
+  :where(.emgithub-file .html-area.markdown-body) {
+    max-height: ${maxHeight ? maxHeight + 'px' : 'none'};
+    overflow-y: ${maxHeight ? 'auto' : 'visible'};
   }
 
   /* Reserve space for "In [1]", "Out [1]" */
