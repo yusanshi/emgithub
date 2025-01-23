@@ -1,4 +1,4 @@
-# emgithub
+# emgithub original info
 
 https://emgithub.com/
 
@@ -7,6 +7,10 @@ Embed a file from GitHub repository just like [GitHub Gist](https://gist.github.
 Demo: <https://yusanshi.com/posts/2019-12-17/emgithub/#%E6%B5%8B%E8%AF%95>.
 
 ![](https://user-images.githubusercontent.com/36265606/185886623-f5f5685d-1e99-43c8-8de2-085dd6954dd7.gif)
+
+## This fork - "collapsible"
+
+This fork allows you to add a parameter "Collapsible" to the script call, that wraps the displayed script output in `<details><summary>...</summary>...</details>` tags. 
 
 ## Get started
 
