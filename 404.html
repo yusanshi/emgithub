@@ -338,6 +338,19 @@
           </i>
         </label>
       </div>
+      <div class="row g-0 align-items-center">
+        <div class="form-check form-check-inline col-auto">
+          <input type="checkbox" class="form-check-input" id="setMaxHeight">
+          <label class="form-check-label" for="setMaxHeight">Set max height</label>
+        </div>
+        <div class="col-auto">
+          <div class="input-group input-group-sm">
+            <input type="number" class="form-control" name="maxHeight" id="maxHeight" min="1" value="500"
+              aria-describedby="maxHeightUnit">
+            <span class="input-group-text" id="maxHeightUnit">px</span>
+          </div>
+        </div>
+      </div>
     </form>
 
     <label for="embededScriptCode" class="form-label"><code>&lt;script&gt;</code> to embed</label>
@@ -432,7 +445,7 @@
 
 
       // Load options from localStorage if possible
-      ['showBorder', 'showLineNumbers', 'showFileMeta', 'showFullPath', 'showCopy', 'fetchFromJsDelivr'].forEach(e => {
+      ['showBorder', 'showLineNumbers', 'showFileMeta', 'showFullPath', 'showCopy', 'fetchFromJsDelivr', 'setMaxHeight'].forEach(e => {
         const isShown = localStorage.getItem(e);
         if (isShown !== null) {
           document.getElementById(e).checked = (isShown === 'true');
@@ -442,6 +455,10 @@
       if (style !== null) {
         document.getElementById('style').value = style;
       }
+      const maxHeight = localStorage.getItem('maxHeight');
+      if (maxHeight !== null) {
+        document.getElementById('maxHeight').value = maxHeight;
+      }
 
       const targetInput = document.querySelector("#target");
 
@@ -450,7 +467,7 @@
         e.preventDefault();
 
         // Save current options using localStorage
-        ['showBorder', 'showLineNumbers', 'showFileMeta', 'showFullPath', 'showCopy', 'fetchFromJsDelivr'].forEach(e => {
+        ['showBorder', 'showLineNumbers', 'showFileMeta', 'showFullPath', 'showCopy', 'fetchFromJsDelivr', 'setMaxHeight'].forEach(e => {
           const element = document.getElementById(e);
           if (!element.parentElement.classList.contains('d-none')) {
             // Only save the non-hidden options
@@ -459,6 +476,7 @@
           }
         });
         localStorage.setItem('style', document.getElementById('style').value);
+        localStorage.setItem('maxHeight', document.getElementById('maxHeight').value);
 
         const target = targetInput.value;
         const pattern = /^https:\/\/github\.com\/(?:[A-Za-z0-9_\-\.]+\/){2}blob\/[A-Za-z0-9_\-\.]+\//;
@@ -506,6 +524,9 @@
 
       toggleFullPathCheckDisplay();
       document.querySelector("#showFileMeta").addEventListener('change', toggleFullPathCheckDisplay);
+
+      toggleMaxHeightInputDisable();
+      document.querySelector("#setMaxHeight").addEventListener('change', toggleMaxHeightInputDisable);
 
       document.querySelector("#type").addEventListener('change', toggleCheckStatus);
 
@@ -557,6 +578,15 @@
         showFullPathCheck.classList.remove('d-none');
       } else {
         showFullPathCheck.classList.add('d-none');
+      }
+    }
+
+    function toggleMaxHeightInputDisable() {
+      const maxHeightInput = document.querySelector('#maxHeight');
+      if (document.querySelector('#setMaxHeight').checked) {
+        maxHeightInput.removeAttribute('disabled');
+      } else {
+        maxHeightInput.setAttribute('disabled', 'disabled');
       }
     }
 
