@@ -4,9 +4,11 @@
   const target = new URL(params.get("target"));
   const type = params.get("type") || 'code';
   const style = params.get("style");
+  const darkStyle = params.get("darkStyle");
   const styleClassName = `hljs-style-${style.replace(/[^a-zA-Z0-9]/g, '-')}`;
+  const darkStyleClassName = darkStyle != null ? `hljs-style-${darkStyle.replace(/[^a-zA-Z0-9]/g, '-')}` : null;
   const lightStyles = ['default', 'a11y-light', 'arduino-light', 'ascetic', 'atom-one-light', 'brown-paper', 'color-brewer', 'docco', 'foundation', 'github', 'googlecode', 'gradient-light', 'grayscale', 'idea', 'intellij-light', 'isbl-editor-light', 'kimbie-light', 'lightfair', 'magula', 'mono-blue', 'nnfx-light', 'panda-syntax-light', 'paraiso-light', 'purebasic', 'qtcreator-light', 'routeros', 'school-book', 'stackoverflow-light', 'tokyo-night-light', 'vs', 'xcode', 'base16/atelier-cave-light', 'base16/atelier-dune-light', 'base16/atelier-estuary-light', 'base16/atelier-forest-light', 'base16/atelier-heath-light', 'base16/atelier-lakeside-light', 'base16/atelier-plateau-light', 'base16/atelier-savanna-light', 'base16/atelier-seaside-light', 'base16/atelier-sulphurpool-light', 'base16/brush-trees', 'base16/classic-light', 'base16/cupcake', 'base16/cupertino', 'base16/default-light', 'base16/dirtysea', 'base16/edge-light', 'base16/equilibrium-gray-light', 'base16/equilibrium-light', 'base16/fruit-soda', 'base16/github', 'base16/google-light', 'base16/grayscale-light', 'base16/gruvbox-light-hard', 'base16/gruvbox-light-medium', 'base16/gruvbox-light-soft', 'base16/harmonic16-light', 'base16/heetch-light', 'base16/horizon-light', 'base16/humanoid-light', 'base16/ia-light', 'base16/material-lighter', 'base16/mexico-light', 'base16/one-light', 'base16/papercolor-light', 'base16/ros-pine-dawn', 'base16/sagelight', 'base16/shapeshifter', 'base16/silk-light', 'base16/solar-flare-light', 'base16/solarized-light', 'base16/summerfruit-light', 'base16/synth-midnight-terminal-light', 'base16/tomorrow', 'base16/unikitty-light', 'base16/windows-10-light', 'base16/windows-95-light', 'base16/windows-high-contrast-light', 'base16/windows-nt-light'];
-  const isDarkStyle = !lightStyles.includes(style);
+  const isDarkStyle = darkStyle != null ? false : !lightStyles.includes(style);
   const showBorder = params.get("showBorder") === "on";
   const showLineNumbers = params.get("showLineNumbers") === "on";
   const showFileMeta = params.get("showFileMeta") === "on";
@@ -135,6 +137,39 @@
     color: #fff;
   }
 
+  @media(prefers-color-scheme: light) {
+    .emgithub-file-auto {
+      border: 1px solid #ccc;
+    }
+
+    .emgithub-file .file-meta-auto {
+      color: #586069;
+      background-color: #f7f7f7;
+      border-top: 1px solid #ccc;
+    }
+
+    .emgithub-file .file-meta-auto a {
+      color: #666;
+    }
+  }
+
+  @media(prefers-color-scheme: dark) {
+    .emgithub-file-auto {
+      border: 1px solid #555;
+      background-color: #0d1117;
+    }
+
+    .emgithub-file .file-meta-auto {
+      color: #f7f7f7;
+      background-color: #586069;
+      border-top: 1px solid #555;
+    }
+
+    .emgithub-file .file-meta-auto a {
+      color: #fff;
+    }
+  }
+
   /* hide content for small device */
   @media (max-width: 575.98px) {
     .emgithub-file .hide-in-phone {
@@ -245,6 +280,42 @@
   .emgithub-file .code-area .hide-line-numbers .hljs-ln-numbers {
     display: none;
   }
+
+  @media(prefers-color-scheme: light) {
+    .emgithub-file .code-area .copy-btn-auto {
+      color: #586069;
+      background-color: #f7f7f7;
+      border: 1px solid #ccc;
+    }
+
+    .emgithub-file .code-area .copy-btn-auto:hover {
+      color: #f7f7f7;
+      background-color: #586069;
+    }
+
+    .emgithub-file .code-area .copy-btn-auto:active {
+      /* darken #586069 by 20% https://www.cssfontstack.com/oldsites/hexcolortool/ */
+      background-color: #252d36;
+    }
+  }
+
+  @media(prefers-color-scheme: dark) {
+    .emgithub-file .code-area .copy-btn-auto {
+      color: #f7f7f7;
+      background-color: #586069;
+      border: 1px solid #555;
+    }
+
+    .emgithub-file .code-area .copy-btn-auto:hover {
+      color: #586069;
+      background-color: #f7f7f7;
+    }
+
+    .emgithub-file .code-area .copy-btn-auto:active {
+      /* darken #f7f7f7 by 20% */
+      background-color: #c4c4c4;
+    }
+  }
 </style>
 
 <style>
@@ -314,11 +385,11 @@
     <div></div>
   </div>
 
-  <div class="emgithub-file emgithub-file-${isDarkStyle ? 'dark' : 'light'}"
+  <div class="emgithub-file emgithub-file-${darkStyle != null ? 'auto' : (isDarkStyle ? 'dark' : 'light')}"
     style="display:none;${showBorder ? '' : 'border:0'}">
     <div class="file-data ${styleClassName}">
       ${type === 'code' ? `<div class="code-area">
-        ${showCopy ? `<a class="copy-btn copy-btn-${isDarkStyle ? 'dark' : 'light'}" href="javascript:void(0)">Copy</a>`
+        ${showCopy ? `<a class="copy-btn copy-btn-${darkStyle != null ? 'auto' : (isDarkStyle ? 'dark' : 'light')}" href="javascript:void(0)">Copy</a>`
         : ''}
         <pre><code class="${fileExtension} ${showLineNumbers ? '' : 'hide-line-numbers'}"></code></pre>
       </div>`: ''}
@@ -328,7 +399,7 @@
 
     </div>
 
-    ${showFileMeta ? `<div class="file-meta file-meta-${isDarkStyle ? 'dark' : 'light'}"
+    ${showFileMeta ? `<div class="file-meta file-meta-${darkStyle != null ? 'auto' : (isDarkStyle ? 'dark' : 'light')}"
       style="${showBorder ? '' : 'border:0'}">
       <a target="_blank" href="${rawFileURL}" style="float:right">view raw</a>
       <a target="_blank" href="${fileURL}">${decodeURIComponent(showFullPath ? filePath : pathSplit[pathSplit.length - 1])}</a>
@@ -365,6 +436,14 @@
     .then((text) => {
       insertStyle(scopeCss(text, '.' + styleClassName));
     });
+
+  if (darkStyle != null) {
+    const loadHLJSDarkStyle = fetch(`https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.6.0/build/styles/${darkStyle}.min.css`)
+      .then((response) => response.text())
+      .then((text) => {
+        insertStyle(scopeCss(text, '.' + darkStyleClassName));
+      });
+  }
 
   promises.push(loadHLJSNum);
 
@@ -409,6 +488,26 @@
   Promise.allSettled(promises).then((result) => {
     const targetDiv = document.getElementById(containerId);
     const fetchSuccess = result[0].status === "fulfilled";
+
+    if (darkStyle != null) {
+      const fileData = targetDiv.querySelector(".file-data");
+      const darkMode = window.matchMedia("(prefers-color-scheme: dark)");
+
+      if (darkMode.matches) {
+        fileData.classList.remove(styleClassName);
+        fileData.classList.add(darkStyleClassName);
+      }
+
+      darkMode.addEventListener("change", e => {
+        if (e.matches) {
+          fileData.classList.remove(styleClassName);
+          fileData.classList.add(darkStyleClassName);
+        } else {
+          fileData.classList.add(styleClassName);
+          fileData.classList.remove(darkStyleClassName);
+        }
+      });
+    }
 
     if (type === 'code') {
       let codeText;
