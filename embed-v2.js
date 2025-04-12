@@ -37,7 +37,8 @@
     ? `https://cdn.jsdelivr.net/gh/${user}/${repository}@${branch}/${directoryPath}/`
     : `https://raw.githubusercontent.com/${user}/${repository}/${branch}/${directoryPath}/`;
 
-  const containerId = Math.random().toString(36).substring(2);
+  const containerId = `id-${Math.random().toString(36).substring(2)}`;
+
   document.currentScript.insertAdjacentHTML(
     'afterend',
     `
@@ -236,7 +237,7 @@
   }
 
   /* use where() for backward compatibility */
-  :where(.emgithub-file .code-area pre code.hljs) {
+  :where(#${containerId} .emgithub-file .code-area pre code.hljs) {
     box-sizing: border-box;
     max-height: ${maxHeight ? maxHeight + 'px' : 'none'};
     overflow-y: ${maxHeight ? 'auto' : 'visible'};
@@ -288,7 +289,7 @@
   }
 
   /* use where() for backward compatibility */
-  :where(.emgithub-file .html-area.markdown-body) {
+  :where(#${containerId} .emgithub-file .html-area.markdown-body) {
     max-height: ${maxHeight ? maxHeight + 'px' : 'none'};
     overflow-y: ${maxHeight ? 'auto' : 'visible'};
   }
